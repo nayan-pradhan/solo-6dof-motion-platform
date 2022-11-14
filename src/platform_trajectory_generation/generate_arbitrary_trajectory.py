@@ -254,7 +254,7 @@ class GenerateArbitraryTrajectoryClass():
     
     def write_output(self, output_file_name, data):
         """
-            Writs to csv file. 
+            Writes to csv file. 
 
             :param output_file_name: Name of output file. 
             :type output_file_name: String. 
