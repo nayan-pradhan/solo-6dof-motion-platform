@@ -229,7 +229,7 @@ class PybulletIKClass():
             :type platform_pos: list[list[float]].
             :param platform_orn: List of target platform orientation values.
             :type platform_orn: list[list[float]].
-            :return target_pos: Retuns list of transformed target robot end-effector ball joint position.
+            :return: Retuns list of transformed target robot end-effector ball joint position.
             :rtype: list[float].
         """
         target_pos = []
@@ -255,8 +255,8 @@ class PybulletIKClass():
 
             :param orientation: Orientation of platform.
             :type orientation: list[float].
-            :return r_mat: Retuns rotation matrix.
-            :rtype: r_mat: ndarray.
+            :return: Retuns rotation matrix.
+            :rtype:: ndarray.
         """
         if len(orientation) == 3:
             r_mat = R.from_euler('xyz', orientation, degrees=False).as_matrix() 
