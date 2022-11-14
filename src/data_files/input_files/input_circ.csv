@@ -1,0 +1,2 @@
+radius[mm], angle[deg], no_of_rounds[int], frequency_in_round[Hz], translation[0/1], translation_dir[cw/ccw], rotation[0/1], rotation_dir[cw/ccw]
+30,15,20,10,1,cw,1,cw

@@ -1,0 +1,6 @@
+target_pos_x[mm],target_pos_y[mm],target_pos_z[mm],target_orn_x[deg],target_orn_y[deg],target_orn_z[deg],time[sec]
+0, 0, 0, 0, 0, 0, 5
+25, 20, 10, 0, 0, 0, 20
+-10, -25, 0, -15, 0, 0, 20
+25, 20, 10, 0, 0, 0, 20
+0, 0, 0, 0, 0, 0, 1

@@ -1,0 +1,7 @@
+run_time[s],waiting_time[s],direction[x/y/z],motion_type[t/r],frequency[Hz],amplitude[mm/deg],offset_x[mm],offset_y[mm],offset_z[mm]
+3,2,x,t,2,20,0,0,0
+3,2,y,t,2,20,0,0,0
+3,2,z,t,2,20,0,0,0
+3,2,x,r,2,10,0,0,0
+3,2,y,r,2,10,0,0,0
+3,2,z,r,2,10,0,0,0
