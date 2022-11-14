@@ -1,12 +1,12 @@
+"""
+    Python script to preview stored data
+"""
+
 import csv
-from turtle import width
 import numpy as np 
 import matplotlib.pyplot as plt
 import math
 import argparse
-from scipy.spatial.transform import Rotation
-from scipy import signal, integrate
-from scipy.signal import savgol_filter
 import sys, os
 sys.path.append('./')
 from config import *
@@ -16,29 +16,25 @@ class DataPreviewClass():
     def __init__(self, 
         name_of_data_csv_file=None,
         name_of_calculated_csv_file=None,
-        name_of_phantom_csv_file=None,
         robot_env = '',                             # pybullet / solo
         plot_fr_joint_angles = False,               # for joint angles of front right leg
         plot_calculated_pos_data = False,           # for calculated pos
         plot_calculated_vel_data = False,           # for calculated vel
         plot_calculated_acc_data = False,           # for calculated acc
         plot_imu_data = False,                      # for imu data
-        plot_phantom_data = False,                  # for phantom data
         plot_circular_traj_platform = False,        # for circular trajectory platform plot
         plot_combined_pose_graph = False,           # for combined 6x3 pose graph
-        plot_x_min = None,
-        plot_x_max = None
+        plot_x_min = None,                          # for x min in x-axis
+        plot_x_max = None                           # for x max in x-axis
     ):
         self.name_of_data_csv_file = name_of_data_csv_file 
         self.name_of_calculated_csv_file = name_of_calculated_csv_file 
-        self.name_of_phantom_csv_file = name_of_phantom_csv_file
         self.robot_env = robot_env
         self.plot_fr_joint_angles = plot_fr_joint_angles
         self.plot_calculated_pos_data = plot_calculated_pos_data
         self.plot_calculated_vel_data = plot_calculated_vel_data
         self.plot_calculated_acc_data = plot_calculated_acc_data
         self.plot_imu_data = plot_imu_data
-        self.plot_phantom_data = plot_phantom_data
         self.plot_circular_traj_platform = plot_circular_traj_platform
         self.plot_combined_pose_graph = plot_combined_pose_graph
         self.plot_x_min = int(plot_x_min) if plot_x_min is not None else None
@@ -55,7 +51,7 @@ class DataPreviewClass():
         print('Loading data...', end='\r')
 
         if self.plot_fr_joint_angles or self.plot_imu_data or self.plot_calculated_vel_data or self.plot_calculated_acc_data or self.plot_calculated_pos_data or self.plot_circular_traj_platform:
-            if self.plot_fr_joint_angles:self.init_params()
+            if self.plot_fr_joint_angles:self.init_fr_leg_params()
             try:
                 if self.plot_fr_joint_angles:self.fill_values_from_data_csv()
                 self.fill_values_from_calculated_csv()
@@ -63,14 +59,6 @@ class DataPreviewClass():
                 print("Unable to fill values from csv. Is csv empty? ==>", self.name_of_data_csv_file)
                 print("Excpetion:", e)
                 exit(-1)
-        
-        if self.plot_phantom_data:
-            try:
-                self.fill_phantom_data()
-            except Exception as e:
-                print("Unable to fill values from csv. Is csv empty? ==>", self.name_of_phantom_csv_file)
-                print("Excpetion:", e)
-                pass 
 
         print('Loading data...done')
 
@@ -89,7 +77,6 @@ class DataPreviewClass():
         if self.plot_calculated_vel_data: self.calculated_vel_data_plotter()
         if self.plot_calculated_acc_data: self.calculated_acc_data_plotter()
         if self.plot_imu_data: self.raw_imu_data_plotter()
-        if self.plot_phantom_data: self.phantom_data_plotter()
         if self.plot_circular_traj_platform: self.circular_traj_platform_plotter()
         if self.plot_combined_pose_graph: self.combined_pose_graph_v()
  
@@ -99,6 +86,12 @@ class DataPreviewClass():
 
 
     def fill_values_from_calculated_csv(self):
+        """
+            Fills calculated data values from csv file. 
+
+            :return: None.
+            :rtype: None.
+        """
         raw_data = np.array(self.get_raw_data_from_csv(self.name_of_calculated_csv_file, header=True))
         
         self.platform_sys_time = raw_data[:, 0]
@@ -120,11 +113,13 @@ class DataPreviewClass():
         self.imu_calc_angular_acceleration = raw_data[:, 40 : 43]
 
 
-    def fill_phantom_data(self):
-        self.phantom_data = np.array(self.get_raw_data_from_csv(self.name_of_phantom_csv_file, True))
+    def init_fr_leg_params(self):
+        """
+            Initializes motor mapping and parameters for fr joint leg. 
 
-
-    def init_params(self):
+            :return: None.
+            :rtype: None.
+        """
         self.motor_mapping = {
             "bl_hip" : 0,
             "br_hip" : 1,
@@ -157,10 +152,17 @@ class DataPreviewClass():
         self.curr_jointAngles = [] 
         self.target_jointAngles = []
         self.current_value = []
-        self.phantom_data = []
     
 
     def map_motors_according_to_ctrl_robot(self, values):
+        """
+            Maps PyBullet motor indices to solo robot motor indices. 
+
+            :param values: Motor values with motor index following PyBullet motor index convention.
+            :type values: ndarray.
+            :return: Updated motor values with motor index following SOLO robot motor index convention.
+            :rtype: ndarray.
+        """
         values = np.array(values)
 
         if len(values.T) != 12 and len(values.T) != 16:
@@ -201,6 +203,12 @@ class DataPreviewClass():
 
     
     def fill_values_from_data_csv(self):
+        """
+            Fills data values from data csv file. 
+
+            :return: None.
+            :rtype: None.
+        """
         raw_data = np.array(self.get_raw_data_from_csv(self.name_of_data_csv_file, header=True))
 
         if self.name_of_data_csv_file == GLOBAL_OUTPUT_DIRECTORY + PYBULLET_DATA_OUTPUT_FILE_NAME:
@@ -221,6 +229,16 @@ class DataPreviewClass():
          
 
     def get_raw_data_from_csv(self, name_of_data_csv_file, header=True):
+        """
+            Returns raw data from any csv file. 
+
+            :param name_of_data_csv_file: Name of csv file.
+            :type name_of_data_csv_file: str.
+            :param header: Specify whether csv file have header or not.
+            :type header: Bool.
+            :return: Returns list of rows from csv file.
+            :rtype: List[List[Float]].
+        """
         f = open(name_of_data_csv_file)
         csv_reader = csv.reader(f)
         data = [] 
@@ -240,6 +258,14 @@ class DataPreviewClass():
 
 
     def fr_joint_angles_plotter(self, name_of_graph=''):
+        """
+            Plots graph for Front Right Leg. 
+
+            :param name_of_graph: Name of graph. 
+            :type name_of_graph: str.
+            :return: None.
+            :rtype: None.
+        """
         if name_of_graph == '':
             name_of_graph = "Joint Angles for Front Right Leg"
         
@@ -324,6 +350,12 @@ class DataPreviewClass():
 
 
     def calculated_pos_data_plotter(self):
+        """
+            Plots graph for calculated and target platform position. 
+
+            :return: None.
+            :rtype: None.
+        """
         fig, axs = plt.subplots(3, 2, figsize=(15, 10), sharex=True)
         fig.suptitle('Calculated position and orientation')
         self.platform_pos_calc = np.array(self.platform_pos_calc)
@@ -357,7 +389,14 @@ class DataPreviewClass():
 
         # plt.show()
 
+
     def calculated_vel_data_plotter(self):
+        """
+            Plots graph for calculated and target platform velocity. 
+
+            :return: None.
+            :rtype: None.
+        """
         fig, axs = plt.subplots(3, 2, figsize=(15, 10), sharex=True)
         fig.suptitle('Calculated Velocity')
         self.platform_lin_vel = np.array(self.platform_lin_vel)
@@ -384,7 +423,7 @@ class DataPreviewClass():
             # temp_transformed_ang_vel_imu = np.array(list([math.degrees(g) for g in self.transformed_ang_vel_imu_data[:, i]]))
             # temp_transformed_lin_vel_imu = np.array(list([g for g in self.transformed_lin_vel_imu_data[:, i]]))
 
-            # axs[i, 0].plot(self.platform_sys_time, temp_transformed_lin_vel_imu, color='cyan', alpha=0.75, label='imu at phantom')
+            # axs[i, 0].plot(self.platform_sys_time, temp_transformed_lin_vel_imu, color='cyan', alpha=0.75, label='imu@ center of platform')
             axs[i, 0].plot(self.platform_sys_time, self.platform_lin_vel_calc[:,i], color='royalblue', alpha=0.5, label = 'calculated')
             axs[i, 0].plot(self.platform_lin_vel[:,i], color='orange', label = 'target')
 
@@ -392,7 +431,7 @@ class DataPreviewClass():
             axs[i, 1].plot(temp_platform_ang_degrees, color='orange', label = 'target')
             if self.robot_env == 'solo' or self.imu_data is not None:
                 axs[i, 1].plot(self.platform_sys_time, temp_gyro_degree, color='red', alpha=0.5, label='imu gyroscope at imu')
-            # axs[i, 1].plot(self.platform_sys_time, temp_transformed_ang_vel_imu, color='cyan', alpha=0.75, label='imu gyroscope at phantom')
+            # axs[i, 1].plot(self.platform_sys_time, temp_transformed_ang_vel_imu, color='cyan', alpha=0.75, label='imu gyroscope@ center of platform')
 
             axs[i, 0].legend()
             axs[i, 1].legend()
@@ -406,7 +445,14 @@ class DataPreviewClass():
 
         # plt.show()
 
+
     def calculated_acc_data_plotter(self):
+        """
+            Plots graph for calculated and target platform acceleration. 
+
+            :return: None.
+            :rtype: None.
+        """
         fig, axs = plt.subplots(3, 2, figsize=(15, 10), sharex=True)
         fig.suptitle('Calculated Acceleration')
         self.platform_lin_acc = np.array(self.platform_lin_acc)
@@ -445,8 +491,8 @@ class DataPreviewClass():
                 axs[i, 0].plot(self.platform_sys_time, temp_g_raw, color='red', alpha=0.5, label='raw imu ground truth')
                 axs[i, 0].plot(self.platform_sys_time, temp_g_kalman, color='green', alpha=0.5, label='kalman filter acceleration')
 
-                axs[i, 0].plot(self.platform_sys_time, temp_transformed_imu, color='cyan', alpha=0.8, label='transformed imu acc at phantom')
-                axs[i, 1].plot(self.platform_sys_time, temp_calc_angular_acceleration, color='cyan', linewidth=0.8, alpha=0.5, label='calculated transformed imu acc at phantom')
+                axs[i, 0].plot(self.platform_sys_time, temp_transformed_imu, color='cyan', alpha=0.8, label='transformed imu acc@ center of platform')
+                axs[i, 1].plot(self.platform_sys_time, temp_calc_angular_acceleration, color='cyan', linewidth=0.8, alpha=0.5, label='calculated transformed imu acc@ center of platform')
             
             axs[i, 0].plot(self.platform_lin_acc[:,i], color='orange', label='target')
 
@@ -464,6 +510,12 @@ class DataPreviewClass():
 
 
     def raw_imu_data_plotter(self):
+        """
+            Plots graph for raw imu data. 
+
+            :return: None.
+            :rtype: None.
+        """
         if self.robot_env != 'solo' or self.imu_data is None:
             print("IMU Data only available for SOLO env!")
             return
@@ -485,15 +537,13 @@ class DataPreviewClass():
                     if iaxes==0:
                         ax.set_ylabel('m/s^2')
                     ax.plot(self.time_stamp, self.imu_data[:, 3 * row + iaxes], alpha=0.8, linewidth=0.8, label='imu pos', color='royalblue')
-                    # ax.plot(self.time_stamp, self.transformted_lin_acc_imu_data[:, iaxes]/self.global_g, alpha=0.8, linewidth=0.8, color='cyan', label='phantom pos')
-                    ax.plot(self.time_stamp, self.transformted_lin_acc_imu_data[:, iaxes], alpha=0.8, linewidth=0.8, color='cyan', label='phantom pos')
+                    ax.plot(self.time_stamp, self.transformted_lin_acc_imu_data[:, iaxes], alpha=0.8, linewidth=0.8, color='cyan', label='center of platform pos')
 
                     ax.legend()
                 elif row == 1:
                     if iaxes==0:
                         ax.set_ylabel('rad/s')
                     ax.plot(self.time_stamp, self.imu_data[:, 3 * row + iaxes], alpha=0.8, linewidth=0.5, label='imu pos', color='royalblue')
-                    # ax.plot(self.time_stamp, self.transformed_ang_vel_imu_data[:, iaxes], alpha=0.8, linewidth=0.8, label='phantom pos', color='cyan')
                     ax.legend()
                 else:
                     ax.plot(self.time_stamp, self.imu_data[:, 3 * row + iaxes], alpha=0.8, linewidth=0.8, color='royalblue')
@@ -502,7 +552,6 @@ class DataPreviewClass():
                         ax.set_ylabel('g')
                     ax.set_xlabel('Time (ms)')
 
-        # fig.tight_layout()
         fig.suptitle('Raw IMU data')
 
         if (self.plot_x_max is not None) or (self.plot_x_min is not None):
@@ -510,48 +559,30 @@ class DataPreviewClass():
                 for j in range(3):
                     axes[i,j].set_xlim([self.plot_x_min, self.plot_x_max])
         
-        
-    def phantom_data_plotter(self):
-        fig, axs = plt.subplots(5, 2, figsize=(15, 10), sharex=True)
-        fig.suptitle('Phantom Data')
-       
-        axs[0, 0].set_title('SG0')
-        axs[0, 1].set_title('SG9')
-        axs[1, 0].set_title('SG1')
-        axs[1, 1].set_title('SG8')
-        axs[2, 0].set_title('SG2')
-        axs[2, 1].set_title('SG7')
-        axs[3, 0].set_title('SG3')
-        axs[3, 1].set_title('SG6')
-        axs[4, 0].set_title('SG4')
-        axs[4, 1].set_title('SG5')
-
-        ct = 0 
-        for i in range(5):
-            axs[i, 0].plot(self.phantom_data[:, ct], label='phantom data', linewidth=0.8)
-            axs[i, 1].plot(self.phantom_data[:, 9-ct], label='phantom data', linewidth=0.8)
-
-            ct+=1
-
-            for j in range(2):
-                axs[4, j].set_xlabel('Time (ms)')
-                axs[0, j].legend()
-
-            axs[i, 0].set_ylabel('Voltage (V)')
-
-        if (self.plot_x_max is not None) or (self.plot_x_min is not None):
-            for i in range(5):
-                for j in range(2):
-                    axs[i,j].set_xlim([self.plot_x_min, self.plot_x_max])
 
     def msd(self, arr1, arr2):
+        """
+            Calculates and returns mean squared distance. 
+
+            :param arr1: Array 1.
+            :type arr1: List[Float].
+            :param arr2: Array 2.
+            :type arr2: List[Float].
+
+            :return: Mean squared distance between two arrays.
+            :rtype: Float.
+        """
         return np.square(np.subtract(arr1,arr2)).mean()
 
     
     def circular_traj_platform_plotter(self):
+        """
+            Plots circular trajectory with x-axis and y-axis. 
+
+            :return: None.
+            :rtype: None.
+        """
         fig, axs = plt.subplots(1, 2, figsize=(22.5, 10), sharex=False)
-        # fig, axs = plt.subplots(1, 2, figsize=(18/2.54, 8/2.54), sharex=False)
-        # fig.suptitle("Circular Trajectory Platform Plot")
         axs[0].set_title("Translation")
         axs[1].set_title("Rotation")
 
@@ -596,9 +627,14 @@ class DataPreviewClass():
         axs[0].grid()
         axs[1].grid()
 
-        # axs[1].legend(loc='upper center', bbox_to_anchor=(-0.1, -0.1),fancybox=True, shadow=True, ncol=6)
 
     def print_msd_results(self):
+        """
+            Prints MSD results for platform translation and rotation.
+
+            :return: None.
+            :rtype: None.
+        """
         print("MSD of translation at x:",'%.3f'% (self.msd(self.platform_pos_calc[:, 0], self.platform_pos[:, 0])*1000), "mm")
         print("MSD of translation at y:",'%.3f'% (self.msd(self.platform_pos_calc[:, 1], self.platform_pos[:, 1])*1000), "mm")
         print("MSD of translation at z:",'%.3f'% (self.msd(self.platform_pos_calc[:, 2], self.platform_pos[:, 2])*1000), "mm")
@@ -608,7 +644,14 @@ class DataPreviewClass():
         print("MSD of rotation at z:",'%.3f'% math.degrees((self.msd(self.platform_ang_calc[:, 2], self.platform_ang[:, 2]))), "deg")
         print("MSD rotation: ",'%.3f'% math.degrees(self.msd(self.platform_ang_calc[:, :3], self.platform_ang[:, :3])), "deg")
 
+
     def combined_pose_graph_v(self):
+        """
+            Plots combined graph at specified x-axis range for calculated and target platform position, velocity, acceleration. 
+
+            :return: None.
+            :rtype: None.
+        """
         fig, axs = plt.subplots(6, 3, figsize=(10, 15))
         fig.suptitle("Position, Velocity, Acceleration for 6 DoF Sine Motion")
         axs[0, 0].set_title('Position (m)')
@@ -722,7 +765,6 @@ class DataPreviewClass():
             axs[i+3,2].set_ylim([-5000,5000])
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Debug options.')
 
@@ -756,11 +798,6 @@ if __name__ == "__main__":
                     action='store_true',
                     help='plot imu')
 
-    parser.add_argument('-ph',
-                    '--phantom',
-                    action='store_true',
-                    help='plot phantom data')
-
     parser.add_argument('-circ',
                     '--circular_plt',
                     action='store_true',
@@ -782,24 +819,16 @@ if __name__ == "__main__":
 
     data_env = [GLOBAL_OUTPUT_DIRECTORY+SOLO_DATA_OUTPUT_FILE_NAME, GLOBAL_OUTPUT_DIRECTORY+SOLO_CALCULATED_FILE_NAME , 'solo']
     # data_env = [GLOBAL_OUTPUT_DIRECTORY+PYBULLET_DATA_OUTPUT_FILE_NAME, GLOBAL_OUTPUT_DIRECTORY+PYBULLET_CALCULATED_FILE_NAME, 'pybullet'] 
-    # phantom_csv = '/home/nayan/Downloads/Phantom-2022-10-10-12-14-35.csv'
-    phantom_csv = '/home/nayan/Downloads/Phantom-2022-10-11-15-45-56.csv'
-    phantom_csv = '/home/nayan/Downloads/Phantom-2022-10-11-16-39-50.csv'
-    phantom_csv = '/home/nayan/Downloads/Phantom-2022-10-11-17-12-55.csv'
-    phantom_csv = '/home/nayan/Downloads/Phantom-2022-10-20-10-45-31.csv'
-
 
     preview_data = DataPreviewClass(
         name_of_data_csv_file = data_env[0] ,
         name_of_calculated_csv_file = data_env[1] ,
-        name_of_phantom_csv_file = phantom_csv , 
         robot_env = data_env[2] ,
         plot_fr_joint_angles = parser.parse_args().fr_leg or parser.parse_args().plot_all,
         plot_calculated_pos_data = parser.parse_args().position or parser.parse_args().plot_all,
         plot_calculated_vel_data = parser.parse_args().velocity or parser.parse_args().plot_all,
         plot_calculated_acc_data = parser.parse_args().acceleration or parser.parse_args().plot_all,
         plot_imu_data = parser.parse_args().imu or parser.parse_args().plot_all,
-        plot_phantom_data = parser.parse_args().phantom or parser.parse_args().plot_all,
         plot_circular_traj_platform = parser.parse_args().circular_plt or parser.parse_args().plot_all,
         plot_x_min = parser.parse_args().xminimum,
         plot_x_max = parser.parse_args().xmaximum
