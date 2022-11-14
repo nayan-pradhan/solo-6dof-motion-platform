@@ -4,7 +4,6 @@
 
 import csv
 import numpy as np 
-from scipy.interpolate import interp1d
 from platform_trajectory_generation.generate_arbitrary_trajectory import *
 
 class GenerateStepTrajectory_CSV_Class():
@@ -25,8 +24,8 @@ class GenerateStepTrajectory_CSV_Class():
 
         prev_pos = [0.0,0.0,0.0] # home offset added in program later
         prev_orn = [0.0,0.0,0.0] # home offset added in program later
-        home_pos = [0,0,0.25]
-        home_orn = [0,0,0]
+        home_pos = [0,0,0.25] # default
+        home_orn = [0,0,0] # default
 
         GenerateArbitraryTrajectoryClass( # wait at home pos before step function
                 flush = True, 
