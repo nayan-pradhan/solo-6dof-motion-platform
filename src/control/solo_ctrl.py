@@ -44,7 +44,11 @@ class SoloControlClass():
         self.init_starting_params()
         if self.phase_0_calibration:
             self.init_masterboard_params()
-            print("PHASE 0 Calibration. Motors and masterboard initialized. Exiting... \nRun Phase 1 with -c flag. \nRun Phase 2 with -v flag. \nRun sequences using calibrated parameters with no flag.\nEnd of program.")
+            print("PHASE 0 Calibration. Motors and masterboard initialized. Exiting... \n \
+                    Run Phase 1 with -c flag. \n \
+                    Run Phase 2 with -v flag. \n \
+                    Run sequences using calibrated parameters with no flag.\n \
+                    End of program.")
             exit(1)
 
         self.sequence_motion_trajectory = self.load_trajectory(self.csv_joint_positions_file_name)
@@ -237,6 +241,12 @@ class SoloControlClass():
     
     
     def maintain_home_position(self):
+        """
+            Maintains home position until trigger is pressed by setting target position as smooth home position.    
+
+            :return: None.
+            :rtype: None.
+        """
         self.target_position = self.smooth_home_pos
         if ((self.counter % 3000) == 0 and self.global_motor_i == 4):
             print("Maintaining position.")
@@ -769,6 +779,12 @@ class SoloControlClass():
 
 
     def get_imu_data(self):
+        """
+            Gets data from imu and stores in imu_data list.  
+
+            :return: None.
+            :rtype: None.
+        """
         self.imu_data = [] 
         for ii in range(3):
             self.imu_data.append(self.robot_if.imu_data_accelerometer(ii))
@@ -778,8 +794,6 @@ class SoloControlClass():
             self.imu_data.append(self.robot_if.imu_data_attitude(ii))
         for ii in range(3):
             self.imu_data.append(self.robot_if.imu_data_linear_acceleration(ii))
-        
-        # print(self.imu_data)
 
 
     def save_pos_in_arr(self):
@@ -802,16 +816,13 @@ class SoloControlClass():
             :return: None.
             :rtype: None.
         """
-        # print("Running sequence motion trajectory")
         self.start_sequence = False 
         self.in_home_position = False 
         self.in_motion_trajectory_sequence = True 
     
-        # self.target_position = self.sequence_motioN_trajectory[self.sequence_counter] 
         if self.sequence_counter != len(self.sequence_motion_trajectory):
             self.target_position = np.array(self.sequence_motion_trajectory[self.sequence_counter])
         else:
-            # self.add_sequence_counter = False   
             self.sequence_counter = 0 
             self.in_motion_trajectory_sequence = False  
             self.end_sequence = True 
@@ -859,7 +870,6 @@ class SoloControlClass():
             :return: None.
             :rtype: None.
         """
-
         hips = [0, 1, 6, 7]
         lower_ls = [2, 4, 8, 10]
         upper_ls = [3, 5, 9, 11]
@@ -1067,23 +1077,15 @@ class SoloControlClass():
             :return: None.
             :rtype: None.
         """
-        # print('reset calibration')
-
         if self.reset_calibration_counter == 0 and self.smooth_reset_trajectory[0][0] is None:
             print("Interpolated smooth reset calibration.")
             self.smooth_reset_trajectory = self.interpolate_smooth_trajectory(next_sequence=[self.zero_position], step_size=2000)
 
         if (self.reset_calibration_counter != len(self.smooth_reset_trajectory)-1) or (self.reset_calibration_counter == 0):
             self.calibration_target_position = self.smooth_reset_trajectory[self.reset_calibration_counter]
-            # if (self.reset_calibration_counter == 0 )or (self.reset_calibration_counter%100==0):
-            #     print(self.reset_calibration_counter)
-            #     print(self.calibration_target_position)
         else:
             self.reset_calibration_complete = True 
             self.smooth_reset_trajectory = [[None] * self.n_slaves * 2] 
-
-        # if self.phase_1_calibration:
-        #     self.calibration_target_position = self.zero_position
 
         if self.reset_calibration_complete:
             if self.phase_1_calibration:
@@ -1160,6 +1162,12 @@ class SoloControlClass():
 
     
     def read_trigger_signal(self): 
+        """
+            Reads ADC trigger from masterboard and sets trigger_is_triggered if trigger is detected.  
+
+            :return: None.
+            :rtype: None.
+        """
         if ((self.counter % 3000) == 0 and self.global_motor_i == 4):            
             print("Waiting for ADC trigger.")
             print("---")
