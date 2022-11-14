@@ -325,6 +325,8 @@ class SoloControlClass():
             :type name_of_csv: str.
             :param header: Specify whether csv file have header or not.
             :type header: Bool.
+            :param num_headers: Number of headers to skip.
+            :type num_headers: int.
             :return: Returns all data in the csv file.
             :rtype: list[list[float]].
         """
