@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="URDF_motion_simulator_simplified_dummy">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.00378758182204412 0.032755494750085 3.55184467035811E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.369358553365675" />
+      <inertia
+        ixx="0.000467603335978343"
+        ixy="4.27759948921302E-09"
+        ixz="3.57513830507563E-06"
+        iyy="0.000554319680998378"
+        iyz="-4.01201938304661E-10"
+        izz="0.000217419375667918" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="hip_left_front">
+    <inertial>
+      <origin
+        xyz="-0.00114777917617824 -3.9453711776459E-05 -0.0951126253066146"
+        rpy="0 0 0" />
+      <mass
+        value="0.0464560424052731" />
+      <inertia
+        ixx="0.000109079106341082"
+        ixy="-1.21193103109536E-08"
+        ixz="-1.94366355261235E-07"
+        iyy="0.000104429264383534"
+        iyz="1.1720057725933E-07"
+        izz="8.99165524220221E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_left_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_left_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hip_left_front"
+    type="continuous">
+    <origin
+      xyz="0.0266 0.0875 0.031"
+      rpy="-1.5707963267949 -0.0888684160670934 1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip_left_front" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="upper_leg_left_front">
+    <inertial>
+      <origin
+        xyz="0.0335844560922996 -4.50009883709579E-05 -0.0812375723976322"
+        rpy="0 0 0" />
+      <mass
+        value="0.0443837568086894" />
+      <inertia
+        ixx="0.000141574062869451"
+        ixy="-9.67490301551373E-09"
+        ixz="9.62173645257009E-06"
+        iyy="0.000138417609775401"
+        iyz="9.76961205925092E-08"
+        izz="1.04627706509352E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_left_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_left_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="upper_leg_left_front"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.168"
+      rpy="-1.61214157811801 0 0" />
+    <parent
+      link="hip_left_front" />
+    <child
+      link="upper_leg_left_front" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="lower_leg_left_front">
+    <inertial>
+      <origin
+        xyz="-0.0140069086189654 -3.22959387843991E-08 -0.0683745671961548"
+        rpy="0 0 0" />
+      <mass
+        value="0.0320230637234883" />
+      <inertia
+        ixx="9.38723848005656E-05"
+        ixy="1.07052769881658E-12"
+        ixz="-1.80942568462192E-06"
+        iyy="9.31714115946445E-05"
+        iyz="5.82157528463886E-11"
+        izz="1.49172266483065E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_left_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_left_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lower_leg_left_front"
+    type="continuous">
+    <origin
+      xyz="0.0451575365316773 0 -0.16"
+      rpy="-0.0017453292519866 0 3.14159265358979" />
+    <parent
+      link="upper_leg_left_front" />
+    <child
+      link="lower_leg_left_front" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="dummy_left_front">
+    <inertial>
+      <origin
+        xyz="1.94289029309402E-16 4.9960036108132E-16 -0.000594786724318619"
+        rpy="0 0 0" />
+      <mass
+        value="4.18879020478639E-06" />
+      <inertia
+        ixx="1.67551608191456E-12"
+        ixy="0"
+        ixz="0"
+        iyy="1.67551608191456E-12"
+        iyz="0"
+        izz="1.67551608191456E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_left_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_left_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="dummy_left_front"
+    type="continuous">
+    <origin
+      xyz="-0.0142500238911007 0 -0.160052746822092"
+      rpy="-1.659664742862 -0.0395999220711239 -1.5707963267949" />
+    <parent
+      link="lower_leg_left_front" />
+    <child
+      link="dummy_left_front" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="hip_right_front">
+    <inertial>
+      <origin
+        xyz="-0.00128328837930811 -4.41156613188269E-05 -0.0894544410841239"
+        rpy="0 0 0" />
+      <mass
+        value="0.0415506938007008" />
+      <inertia
+        ixx="0.000108718038535273"
+        ixy="-1.21209885638298E-08"
+        ixz="-1.9436680846915E-07"
+        iyy="0.000104149900905259"
+        iyz="1.17168576432383E-07"
+        izz="8.56930927599927E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_right_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_right_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hip_right_front"
+    type="continuous">
+    <origin
+      xyz="0.0421999999999998 -0.0875 0.0310000000000001"
+      rpy="1.5707963267949 -0.0888684160671074 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip_right_front" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="upper_leg_right_front">
+    <inertial>
+      <origin
+        xyz="0.0335842661332895 -4.47898904026856E-05 -0.0812357114830771"
+        rpy="0 0 0" />
+      <mass
+        value="0.0443850830836431" />
+      <inertia
+        ixx="0.000141579496511874"
+        ixy="-9.57177707552774E-09"
+        ixz="9.62238517618777E-06"
+        iyy="0.000138413773254541"
+        iyz="9.74605788608334E-08"
+        izz="1.04533350003678E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_right_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_right_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="upper_leg_right_front"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.1524"
+      rpy="1.61214157811801 0 0" />
+    <parent
+      link="hip_right_front" />
+    <child
+      link="upper_leg_right_front" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="lower_leg_right_front">
+    <inertial>
+      <origin
+        xyz="-0.0307978176908624 -2.77351331068321E-08 -0.0683745706192754"
+        rpy="0 0 0" />
+      <mass
+        value="0.0320230612142886" />
+      <inertia
+        ixx="9.38723784822054E-05"
+        ixy="1.25390320575601E-12"
+        ixz="-1.80942619373483E-06"
+        iyy="9.31714063906275E-05"
+        iyz="5.55800084008384E-11"
+        izz="1.4917205231192E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_right_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_right_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lower_leg_right_front"
+    type="continuous">
+    <origin
+      xyz="0.0283666271345778 0 -0.16"
+      rpy="0.00174532925198727 0 -3.14159265358979" />
+    <parent
+      link="upper_leg_right_front" />
+    <child
+      link="lower_leg_right_front" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="dummy_right_front">
+    <inertial>
+      <origin
+        xyz="8.53371171750383E-05 0.000161763066584331 0.00118091884280049"
+        rpy="0 0 0" />
+      <mass
+        value="4.18879020478639E-06" />
+      <inertia
+        ixx="1.67551608191456E-12"
+        ixy="4.10207670714926E-29"
+        ixz="0"
+        iyy="1.67551608191456E-12"
+        iyz="2.52435489670724E-29"
+        izz="1.67551608191456E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_right_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_right_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="dummy_right_front"
+    type="continuous">
+    <origin
+      xyz="-0.0304430910633562 0 -0.16010597465947"
+      rpy="-1.34906825918403 -0.0492173125903429 1.64177086104973" />
+    <parent
+      link="lower_leg_right_front" />
+    <child
+      link="dummy_right_front" />
+    <axis
+      xyz="0.0714119628942929 0.135366866036153 0.988218671719541" />
+  </joint>
+  <link
+    name="hip_left_back">
+    <inertial>
+      <origin
+        xyz="-0.00128328848757414 -4.41136000242613E-05 -0.0894544419441646"
+        rpy="0 0 0" />
+      <mass
+        value="0.0415506942379489" />
+      <inertia
+        ixx="0.000108718040433142"
+        ixy="-1.21217786142228E-08"
+        ixz="-1.94366773896543E-07"
+        iyy="0.000104152221436801"
+        iyz="1.17167819342496E-07"
+        izz="8.57162796959362E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_left_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_left_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hip_left_back"
+    type="continuous">
+    <origin
+      xyz="-0.0422000000000003 0.0874999999999999 0.031"
+      rpy="1.5707963267949 -0.088868416067085 1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip_left_back" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="upper_leg_left_back">
+    <inertial>
+      <origin
+        xyz="0.0335842810737708 -4.48592050072694E-05 -0.0812358386973087"
+        rpy="0 0 0" />
+      <mass
+        value="0.0443850097633001" />
+      <inertia
+        ixx="0.000141579517248848"
+        ixy="-9.5715177549458E-09"
+        ixz="9.62238475227013E-06"
+        iyy="0.000138416457279121"
+        iyz="9.74583302140696E-08"
+        izz="1.04559983630747E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_left_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_left_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="upper_leg_left_back"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.1524"
+      rpy="1.61214157811801 0 0" />
+    <parent
+      link="hip_left_back" />
+    <child
+      link="upper_leg_left_back" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="lower_leg_left_back">
+    <inertial>
+      <origin
+        xyz="-0.0140069083043222 -2.77293754624708E-08 -0.0683745697448815"
+        rpy="0 0 0" />
+      <mass
+        value="0.0320230619709976" />
+      <inertia
+        ixx="9.38723795639434E-05"
+        ixy="1.25511935342707E-12"
+        ixz="-1.80942613006925E-06"
+        iyy="9.31714073784877E-05"
+        iyz="5.5578152269522E-11"
+        izz="1.49172056634742E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_left_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_left_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lower_leg_left_back"
+    type="continuous">
+    <origin
+      xyz="0.0451575365316778 0 -0.16"
+      rpy="0.00174532925198693 0 -3.14159265358979" />
+    <parent
+      link="upper_leg_left_back" />
+    <child
+      link="lower_leg_left_back" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="dummy_left_back">
+    <inertial>
+      <origin
+        xyz="-2.77555756156289E-17 1.11022302462516E-16 -0.000594786724320312"
+        rpy="0 0 0" />
+      <mass
+        value="4.18879020478639E-06" />
+      <inertia
+        ixx="1.67551608191456E-12"
+        ixy="0"
+        ixz="0"
+        iyy="1.67551608191456E-12"
+        iyz="0"
+        izz="1.67551608191456E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_left_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_left_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="dummy_left_back"
+    type="continuous">
+    <origin
+      xyz="-0.0142500238910989 0 -0.160052746822092"
+      rpy="-1.65966474286198 0.0395999220711294 -1.5707963267949" />
+    <parent
+      link="lower_leg_left_back" />
+    <child
+      link="dummy_left_back" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="hip_right_back">
+    <inertial>
+      <origin
+        xyz="-0.00114777885671997 -3.94546783551199E-05 -0.0951126260332582"
+        rpy="0 0 0" />
+      <mass
+        value="0.0464560462885094" />
+      <inertia
+        ixx="0.000109079107012902"
+        ixy="-1.21190518391895E-08"
+        ixz="-1.94367071199817E-07"
+        iyy="0.000104416981415421"
+        iyz="1.17200818509972E-07"
+        izz="8.9793727006512E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_right_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/hip_right_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hip_right_back"
+    type="continuous">
+    <origin
+      xyz="-0.0266 -0.0875 0.031"
+      rpy="-1.5707963267949 -0.0888684160668232 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip_right_back" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="upper_leg_right_back">
+    <inertial>
+      <origin
+        xyz="0.033584399570773 -4.49615734106068E-05 -0.0812369288638612"
+        rpy="0 0 0" />
+      <mass
+        value="0.0443841843830056" />
+      <inertia
+        ixx="0.000141574155249554"
+        ixy="-9.67490050850781E-09"
+        ixz="9.62173181472236E-06"
+        iyy="0.000138412354185531"
+        iyz="9.76815102348098E-08"
+        izz="1.04574244135255E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_right_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/upper_leg_right_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="upper_leg_right_back"
+    type="continuous">
+    <origin
+      xyz="0 0 -0.168"
+      rpy="-1.61214157811801 0 0" />
+    <parent
+      link="hip_right_back" />
+    <child
+      link="upper_leg_right_back" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="lower_leg_right_back">
+    <inertial>
+      <origin
+        xyz="-0.0307978180198995 -3.21887455578818E-08 -0.06837456675346"
+        rpy="0 0 0" />
+      <mass
+        value="0.032023064104675" />
+      <inertia
+        ixx="9.38723853505118E-05"
+        ixy="1.07431027584969E-12"
+        ixz="-1.80942565492456E-06"
+        iyy="9.31714120991633E-05"
+        iyz="5.80833412873038E-11"
+        izz="1.49172268522215E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_right_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/lower_leg_right_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lower_leg_right_back"
+    type="continuous">
+    <origin
+      xyz="0.0283666271345683 0 -0.160000000000044"
+      rpy="-0.00174532925198751 0 -3.14159265358979" />
+    <parent
+      link="upper_leg_right_back" />
+    <child
+      link="lower_leg_right_back" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="dummy_right_back">
+    <inertial>
+      <origin
+        xyz="9.16337348415841E-05 7.63087066372181E-05 0.00113539175443665"
+        rpy="0 0 0" />
+      <mass
+        value="4.18879020478639E-06" />
+      <inertia
+        ixx="1.67551608191456E-12"
+        ixy="8.59858386690903E-29"
+        ixz="1.26217744835362E-29"
+        iyy="1.67551608191456E-12"
+        iyz="0"
+        izz="1.67551608191456E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_right_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_motion_simulator_simplified_dummy/meshes/dummy_right_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="dummy_right_back"
+    type="continuous">
+    <origin
+      xyz="-0.0304962413609679 0 -0.160101242515636"
+      rpy="-1.41154703399905 0.0370007615455834 1.65130135925405" />
+    <parent
+      link="lower_leg_right_back" />
+    <child
+      link="dummy_right_back" />
+    <axis
+      xyz="0.0802652371376651 0.066841501620514 0.994529891641447" />
+  </joint>
+</robot>

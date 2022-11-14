@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="URDF_sensor_platform_simplified">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.00160874950952901 -0.000124365523785747 -0.0068136803413703"
+        rpy="0 0 0" />
+      <mass
+        value="0.584644252400981" />
+      <inertia
+        ixx="0.00181695467466018"
+        ixy="-2.97473311710986E-07"
+        ixz="-2.7758682434967E-05"
+        iyy="0.00840354375953609"
+        iyz="-3.79217897579042E-06"
+        izz="0.00987577873844641" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_sensor_platform_simplified/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_sensor_platform_simplified/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
