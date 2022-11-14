@@ -1,5 +1,10 @@
 # solo-6dof-motion-platform
 
+<p float="left">
+  <img src="images/pybullet_simulation.png" width="250" />
+  <img src="images/solo_robot.png" width="250" /> 
+</p>
+
 ## <u>Instructions to run program</u>:
 
 ### Command Line Interface
