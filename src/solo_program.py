@@ -82,14 +82,12 @@ class SoloProgram():
         DataPreviewClass(
             name_of_data_csv_file = GLOBAL_OUTPUT_DIRECTORY+SOLO_DATA_OUTPUT_FILE_NAME ,
             name_of_calculated_csv_file = GLOBAL_OUTPUT_DIRECTORY+SOLO_CALCULATED_FILE_NAME,
-            name_of_phantom_csv_file = None , 
             robot_env = 'solo',
             plot_fr_joint_angles = True,
             plot_calculated_pos_data = True,
             plot_calculated_vel_data = True,
             plot_calculated_acc_data = True,
             plot_imu_data = True,
-            plot_phantom_data = False,
             plot_circular_traj_platform=True
         )
 
