@@ -9,10 +9,12 @@ from config import *
 
 class PybulletControlClass():
 
-    def __init__(self, render_gui = True,
-                        kp = 10,
-                        kd = 0, 
-                        torque_saturation = 2):
+    def __init__(self, 
+        render_gui = True, 
+        kp = 10,
+        kd = 0, 
+        torque_saturation = 2
+    ):
         
         self.render_gui = render_gui
         self.kp = kp
@@ -40,10 +42,14 @@ class PybulletControlClass():
 
         self.store_data()
 
-        
-
 
     def setup_pybullet_model(self):
+        """
+            Setup PyBullet control environment by loading robot URDFs, initializing motors, adjusting collision, and adding contraints.
+
+            :return: None.
+            :rtype: None.
+        """
         if self.render_gui:
             p.connect(p.GUI)
         else:
@@ -93,7 +99,6 @@ class PybulletControlClass():
         offset_com_platform = np.array([-6.23, 1.26, -4.63])/1000 # offset center of mass to origin of the platform
         joint_indices = [2, 6, 10, 14] # Indices of the lower legs (FL, FR, HL, HR)
         
-        
         for i in joint_indices:
             p.setCollisionFilterPair(self.robot_id, self.platform_id, i, -1, False) # disable collision
             newjoint_pos_leg = joint_pos_leg # Position of new joint
@@ -120,11 +125,18 @@ class PybulletControlClass():
 
             p.changeConstraint(cid, maxForce = 20.)     # Set maxForce of constraint
 
+
     def start_motion(self):
+        """
+            Start and execute complete motion from loaded csv file.
+
+            :return: None.
+            :rtype: None.
+        """
         counter = 0
         last_time = 0
         while counter < len(self.joint_positions):
-            if time.process_time() - last_time > 1./self.pybullet_frequency:
+            if (time.process_time() - last_time > 1./self.pybullet_frequency) or not self.render_gui:
                 self.joint_targets = self.joint_positions[counter]
                 # save current platform position
                 self.curr_platform_pos.append(p.getBasePositionAndOrientation(self.platform_id)[0])
@@ -144,6 +156,12 @@ class PybulletControlClass():
 
 
     def controller(self):
+        """
+            PyBullet KD torque controller. 
+
+            :return: None.
+            :rtype: None.
+        """
         velocity_target = 0
         torque = []
         current = []
@@ -174,10 +192,20 @@ class PybulletControlClass():
                                     controlMode=p.TORQUE_CONTROL, 
                                     forces=torque)
 
-        
-
 
     def read_from_csv(self, path, header = False, num_headers=1):
+        """
+            Reads data from csv file.
+
+            :param path: path and name of csv file.
+            :type path: str.
+            :param header: Specify whether csv file have header or not.
+            :type header: Bool.
+            :param num_headers: Number of headers to skip.
+            :type num_headers: int.
+            :return: Returns all data in the csv file.
+            :rtype: list[list[float]].
+        """
         t_num_headers = num_headers
         f = open(path)
         data = []
@@ -204,6 +232,12 @@ class PybulletControlClass():
         return data
 
     def store_data(self):
+        """
+            Stores PyBullet simulation data in csv file. 
+
+            :return: None.
+            :rtype: None.
+        """
         f = open(GLOBAL_OUTPUT_DIRECTORY + PYBULLET_DATA_OUTPUT_FILE_NAME, 'w')
         f_c = open(GLOBAL_OUTPUT_DIRECTORY + HISTORY_DIR + PYBULLET_DATA_OUTPUT_FILE_UNIQUE, 'w')
         writer = csv.writer(f)
