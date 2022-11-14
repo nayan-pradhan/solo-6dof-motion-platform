@@ -13,8 +13,6 @@ class PybulletIKClass():
         robot_environment = ''
     ):
         self.robot_environment = robot_environment
-        # input: csv file w/ position + rotation of platfrom
-        # output: csv file w/ joint angles 
         self.data = []
         self.robot_id = None
         self.dummy_joints = []
@@ -35,7 +33,14 @@ class PybulletIKClass():
         
         p.disconnect()
 
+
     def load_URDF_model(self):
+        """
+            Setup PyBullet control environment by loading robot URDFs, adjusting collision, and adding contraints.
+
+            :return: None.
+            :rtype: None.
+        """
         # loading robot URFD file
         URDF_home_position = [0,0,0]
         URDF_home_orientation = p.getQuaternionFromEuler([0,0,0])
@@ -92,7 +97,14 @@ class PybulletIKClass():
 
             p.changeConstraint(cid, maxForce = 20.)     # Set maxForce of constraint
 
+
     def controller(self):
+        """
+            Controller required calculate PyBullet Inverse Kinematics.
+
+            :return: None.
+            :rtype: None.
+        """
         velocity_target = 0
         torque = []
         kp = 20
@@ -116,15 +128,20 @@ class PybulletIKClass():
                 torque[-1] = torque_saturation
             elif torque[-1] < -torque_saturation:
                 torque[-1] = -torque_saturation
-
-            
         
         p.setJointMotorControlArray(bodyUniqueId=self.robot_id, 
                                     jointIndices=list(range(len(self.joint_targets))), 
                                     controlMode=p.TORQUE_CONTROL, 
                                     forces=torque)
 
+
     def calculate_inverse_kinematic(self):
+        """
+            Calculates target joint angles from PyBullet Inverse Kinematics and stores in csv file. 
+
+            :return: None.
+            :rtype: None.
+        """
         joint_positions = []
         progress = 0.
         p.setGravity(0,0,-9.81)
@@ -188,20 +205,33 @@ class PybulletIKClass():
         f.close()
         print('Saving data to csv...done')
 
-        # joint_positions = np.array(joint_positions)
-        # plt.plot(joint_positions[:, [0, 4, 8, 12]], label=['target hip fl', 'target hip fr', 'target hip bl', 'target hip br'])
-        # plt.legend()
-        # plt.show()
+        """
+        # Debugging option
+        joint_positions = np.array(joint_positions)
+        plt.plot(joint_positions[:, [0, 4, 8, 12]], label=['target hip fl', 'target hip fr', 'target hip bl', 'target hip br'])
+        plt.legend()
+        plt.show()
 
-        # plt.plot(joint_positions[:, [1, 5, 9, 13]], label=['target upper fl', 'target upper fr', 'target upper bl', 'target upper br'])
-        # plt.legend()
-        # plt.show()
+        plt.plot(joint_positions[:, [1, 5, 9, 13]], label=['target upper fl', 'target upper fr', 'target upper bl', 'target upper br'])
+        plt.legend()
+        plt.show()
 
-        # plt.plot(joint_positions[:, [2, 6, 10, 14]], label=['target lower fl', 'target lower fr', 'target lower bl', 'target lower br'])
-        # plt.legend()
-        # plt.show()
+        plt.plot(joint_positions[:, [2, 6, 10, 14]], label=['target lower fl', 'target lower fr', 'target lower bl', 'target lower br'])
+        plt.legend()
+        plt.show()
+        """
 
     def transform_platform_to_robot(self, platform_pos, platform_orn):
+        """
+            Transforms target platform pose to target robot end-effector ball joint position.
+
+            :param platform_pos: List of target platform position values.
+            :type platform_pos: list[list[float]].
+            :param platform_orn: List of target platform orientation values.
+            :type platform_orn: list[list[float]].
+            :return target_pos: Retuns list of transformed target robot end-effector ball joint position.
+            :rtype: list[float].
+        """
         target_pos = []
         ball_joint_pos = []
         joint_pos_platform = np.array([181.65, 118.89, 6.73])/1000   # relative Position of ball joint to origin
@@ -220,17 +250,34 @@ class PybulletIKClass():
 
 
     def get_rotation_matrix(self, orientation):
-        # Euler
+        """
+            Returns rotation matrix calculated with orientation value.
+
+            :param orientation: Orientation of platform.
+            :type orientation: list[float].
+            :return r_mat: Retuns rotation matrix.
+            :rtype: r_mat: ndarray.
+        """
         if len(orientation) == 3:
-            return R.from_euler('xyz', orientation, degrees=False).as_matrix()
+            r_mat = R.from_euler('xyz', orientation, degrees=False).as_matrix() 
+            return r_mat
         elif len(orientation) == 4:
-            return R.from_quat(orientation).as_matrix()
+            r_mat = R.from_quat(orientation).as_matrix()
+            return r_mat
         else:
-            print('wrong input for orientation.')
+            print('Wrong input for orientation.')
             exit()
 
 
     def read_from_csv(self, header = False):
+        """
+            Reads data from csv file.
+
+            :param header: Specify whether csv file have header or not.
+            :type header: Bool.
+            :return: None.
+            :rtype: None.
+        """
         f = open(GLOBAL_AUTOGENERATED_DIRECTORY + TRAJ_PLATFORM_FILE_NAME, 'r')
         for line in csv.reader(f):
             if header:
@@ -244,9 +291,6 @@ class PybulletIKClass():
                         temp.append(e)
                 self.data.append(temp)
         f.close()
-
-
-
 
 
 if __name__ == '__main__':
