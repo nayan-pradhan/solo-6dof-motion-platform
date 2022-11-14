@@ -92,6 +92,16 @@ class GenerateCircularTrajectoryClass():
 
 
     def get_interpolated_traj(self, start, end):
+        """
+            Generate interpolated trajectory.
+
+            :param start: Starting point. 
+            :type start: Float.
+            :param end: Ending point. 
+            :type end: Float.
+            :return: Returns linear interpolated points.
+            :rtype: list[]
+        """
         yx = np.arange(0, 2)
         y = [start, end]
         f = interp1d(yx, y, kind='linear', axis=0)
@@ -100,6 +110,14 @@ class GenerateCircularTrajectoryClass():
 
 
     def write_output(self, data):
+        """
+            Writes to csv file. 
+
+            :data: Data to write in csv file. 
+            :type data: list[float]
+            :return: None.
+            :rtype: None.
+        """
         file = open(self.output_file_name, 'w')
         data_writer = csv.writer(file)
         data_writer.writerow(['tx', 'ty', 'tz', 'rx', 'ry', 'rz'])
@@ -108,6 +126,13 @@ class GenerateCircularTrajectoryClass():
 
 
     def read_input(self, header=True):
+        """
+            Reads from csv file.
+
+            :param header: True if csv file contains header, False if csv file does not contain header.
+            :return: Returns all lines from csv file.
+            :rtype: list[list[]].
+        """
         file = open(self.input_file_name, 'r')
         csv_reader = csv.reader(file)
         if header:
