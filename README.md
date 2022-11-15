@@ -1,12 +1,5 @@
 # SOLO 6 DoF Motion Platform
 
-<!-- <img src="images/solo_render.png" width="500" /> -->
-
-<!-- <p float="left">
-  <img src="images/pybullet_simulation.png" width="250" />
-  <img src="images/solo_robot.png" width="250" /> 
-</p> -->
-
 <p align="center">
   <img src="images/solo_render.png" width="500"/>
 </p>
