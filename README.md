@@ -17,6 +17,7 @@ We present a new open-source Six Degrees of Freedom (DoF) motion platform that i
 1. [Hardware Framework](docs/hardware_framework.md)
 2. [Software Framework](docs/software_framework.md)
 3. [Setup and Usage](docs/setup_and_usage.md)
+4. [Program Execution](docs/program_execution.md)
 
 ## <u>About the Creaters</u>
 The SOLO 6 DoF Motion Platform was created at the [Dynamic Locomotion Group](https://dlg.is.mpg.de) at the [Max-Planck Institute for Intelligent Systems](https://is.mpg.de) by: 
