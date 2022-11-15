@@ -31,7 +31,7 @@ To fix the robot during movement, we designed a base that is screwed on an optic
 </p>
 
 The table below lists all the parts needed to build the base.
-<center>
+
 | No.           | Name      | Qty.  |
 | :-----:       | ---     | :---: |
 | 1  | Base | 1 |
@@ -46,4 +46,3 @@ The table below lists all the parts needed to build the base.
 | 10 | SHC Screw M3x16 | 4  |
 | 11 | SHC Screw M2.5x25 | 8  |
 | 12 | HeliCoil M4 Thread Insert | 22   |
-</center>
