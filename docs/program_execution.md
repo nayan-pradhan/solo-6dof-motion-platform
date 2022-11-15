@@ -1,9 +1,6 @@
 # Program Execution
 
-## Instructions to run program
 The software package can be executed using the Command Line Interface or the In-line Terminal Interface. 
-
----
 
 ## Command Line Interface
 The command line interface offers a step-by-step interface that prompts the user for inputs on what program configuration the package should run. This method is convenient and recommended for users who are not familir with the software package.
