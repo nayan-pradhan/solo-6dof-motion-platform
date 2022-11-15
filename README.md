@@ -1,9 +1,11 @@
-# 6 DoF SOLO Motion Platform
+# SOLO 6 DoF Motion Platform
 
-<p float="left">
+<img src="images/solo_render.png" width="500" />
+
+<!-- <p float="left">
   <img src="images/pybullet_simulation.png" width="250" />
   <img src="images/solo_robot.png" width="250" /> 
-</p>
+</p> -->
 
 ## <u>Introduction</u>
 We present a new open-source Six Degrees of Freedom (DoF) motion platform that is capable of producing controlled high frequency motion (surge, heave, sway, roll, pitch, and yaw) in 3D space. We introduce and implement the unique idea of flipping a quadruped robot and attaching our modular 3D printed platform (holding the payload) to the feet of the robot and using the legs as end-effectors to move the attached platform.
