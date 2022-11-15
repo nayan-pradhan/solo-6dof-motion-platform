@@ -43,17 +43,32 @@ The Inverse Kinematics Tool module takes the auto-generated csv file of platform
 
 ## 3. Control Environment
 The Control Environment module takes the auto-generated csv file of target joint angles generated from Section [Inverse Kinematics Tool](#inverse-kinematics-tool) as the input. The controller uses the target joint angles and actual joint angles in order to give torque commands to the motors. Our software framework contains two control environments:
-- PyBullet Simulation Environment: The PyBullet Simulation Environment (shown in figure to the left below) runs the 6 DoF SOLO motion platform in $240$ Hz (as it is limited by PyBullet). The simulation environment loads the URDF models of the SOLO robot and the sensor platform and creates constraints between the foot joints and the platform corners. The PyBullet simulation can be used to test various new algorithms and implementations without using the actual SOLO robot.  
-- SOLO Environment: The SOLO Environment (shown in figure to the right below) runs the 6 DoF SOLO motion platform (physical) in $1000$ Hz. The SOLO environment initializes the SOLO robot (according to the master-board code), calibrates the SOLO robot (more details shared in [setup_and_usage.md](setup_and_usage.md), executes the desired motion trajectory, and reads/stores the IMU, motors, and sensor data. The PD controller gains can be updated if required. 
+- <b>PyBullet Simulation Environment:</b> The PyBullet Simulation Environment (shown in figure to the left below) runs the 6 DoF SOLO motion platform in $240$ Hz (as it is limited by PyBullet). The simulation environment loads the URDF models of the SOLO robot and the sensor platform and creates constraints between the foot joints and the platform corners. The PyBullet simulation can be used to test various new algorithms and implementations without using the actual SOLO robot.  
+- <b>SOLO Environment:</b> The SOLO Environment (shown in figure to the right below) runs the 6 DoF SOLO motion platform (physical) in $1000$ Hz. The SOLO environment initializes the SOLO robot (according to the master-board code), calibrates the SOLO robot (more details shared in [setup_and_usage.md](setup_and_usage.md), executes the desired motion trajectory, and reads/stores the IMU, motors, and sensor data. The PD controller gains can be updated if required. 
 
 <p align="center">
   <img src="../images/pybullet_simulation.png" width="250" />
   <img src="../images/solo_robot.png" width="250" /> 
 </p>
 
-<b>Input:</b> CSV file with desired target joint angles for SOLO robot from [Inverse Kinematics Tool](#inverse-kinematics-tool) at [`src/data_files/auto_generated/traj_platform.csv`](../src/data_files/auto_generated/traj_joints.csv).  
+<b>Input:</b> CSV file with desired target joint angles for SOLO robot from [Inverse Kinematics Tool](#inverse-kinematics-tool) at [`src/data_files/auto_generated/traj_joints.csv`](../src/data_files/auto_generated/traj_joints.csv).  
 <b>Output:</b> Robot motion (simulation or physical) and CSV file with all data collected at [`src/data_files/output_files`](../src/data_files/output_files). 
 
 <a name="post-processing"></a>
 
 ## 4. Post Processing
+The final module in the software architecture is the Post Processing module. The Post Processing module contains two main parts:
+- <b>Data Processing:</b> The Data Processing module reads and loads the data csv files saved in tbe above sections. A method to calculate the position and orientation at the center of the platform based on the robot joint angles using forward kinematics has been implemented. The linear and angular velocity and linear and angular acceleration of the platform is also derived using the position and orientation of the platform. This provides the option for a user to get the position, velocity, and acceleration at the platform without investing in an expensive IMU. We use these calculations in order to test and compare with the IMU data. The calculated platform position, orientation, linear velocity, angular velocity, linear acceleration, and angular acceleration are filtered using a butter lowpass filter of fixed cutoff frequency of $50$ Hz and sample frequency of $1000$ Hz in order to get smoother results. In addition, methods to transform the IMU data (angular velocity and linear acceleration) from the IMU position to the center of the platform is also present as this is essential for our research. The  Depending on the project and desired results, this section can be used, modified, or ignored. A zoomed-in plot showing the calculated, target, and measured IMU angular velocity for rotation in x-axis and translation in x-axis is shown below. All data is stored into a csv file that can be updated by the user based on the research, project, available resources, and desired outcome. The data preview module is loaded automatically after.
+<p align="center">
+  <img src="../images/imu_overlay_example_graph.png" width="500" />
+</p>
+
+- <b>Data Preview:</b> The Data Preview module is responsible of loading data from the stored csv files and plotting plots and graphs depending on the research, project, and desired outcome. The data preview module is called automatically at the end of the program. It can also be executed independently for quick visualization of the latest data. An example summary plot showing the calculated and target platform position and orientation when commanded x,y,z translation and rotation is shown below.
+
+<p align="center">
+  <img src="../images/pose_example_graph.png" width="500" />
+</p>
+
+<b>Input:</b> CSV file with all data collected from [Control Environment](#control-environment) at [`src/data_files/output_files`](../src/data_files/output_files).  
+
+<b>Output:</b> Summary Plots and Graphs. 
