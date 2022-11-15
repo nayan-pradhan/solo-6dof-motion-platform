@@ -29,15 +29,15 @@ We have implemented the following options for trajectory generation:
 - <b>Circular Trajectory Generation:</b> The circular trajectory generation generates a sequence of platform target positions and orientations such that the platform translates and rotates in a circular movement by taking in the radius of translation (mm), the angle of rotation (deg), the number of rounds, the frequency of rotation in each round, the translation and rotation direction (clock-wise/counter-clock-wise), and a flag to enable and/or disable translation and rotation. 
 
 <b>Input:</b> CSV file according to required trajectory at [`src/data_files/input_files/`](/src/data_files/input_files/).  
-<b>Output:</b> CSV file with desired target platform position and orientation auto-generated at [`src/data_files/auto_generated/traj_platform.csv`](src/data_files/auto_generated/traj_platform.csv).  
+<b>Output:</b> CSV file with desired target platform position and orientation auto-generated at [`src/data_files/auto_generated/traj_platform.csv`](../src/data_files/auto_generated/traj_platform.csv).  
 
 <a name="inverse-kinematics-tool"></a>
 
 ## 2. Inverse Kinematics Tool
 The Inverse Kinematics Tool module takes the auto-generated csv file of platform trajectories generated from section [Platform Trajectory Generation](#platform-trajectory-generation) as the input and calculates the target joint angles for each joint using inverse kinematics. We are using PyBullet for the inverse kinematics calculation. A new csv file is auto-generated that stores the target joint angles for each joint of the SOLO robot. 
 
-<b>Input:</b> Auto-generated CSV file with desired target platform position and orientation from [Platform Trajectory Generation](#platform-trajectory-generation) at [`src/data_files/auto_generated/traj_platform.csv`](src/data_files/auto_generated/traj_platform.csv).  
-<b>Output:</b> CSV file with desired target joint angles for SOLO robot [`src/data_files/auto_generated/traj_platform.csv`](src/data_files/auto_generated/traj_joints.csv).  
+<b>Input:</b> Auto-generated CSV file with desired target platform position and orientation from [Platform Trajectory Generation](#platform-trajectory-generation) at [`src/data_files/auto_generated/traj_platform.csv`](../src/data_files/auto_generated/traj_platform.csv).  
+<b>Output:</b> CSV file with desired target joint angles for SOLO robot [`src/data_files/auto_generated/traj_joints.csv`](../src/data_files/auto_generated/traj_joints.csv).  
 
 <a name="control-environment"></a>
 
@@ -51,6 +51,6 @@ The Control Environment module takes the auto-generated csv file of target joint
   <img src="../images/solo_robot.png" width="250" /> 
 </p>
 
-<b>Input:</b> CSV file with desired target joint angles for SOLO robot from [Inverse Kinematics Tool](#inverse-kinematics-tool) at [`src/data_files/auto_generated/traj_platform.csv`](src/data_files/auto_generated/traj_joints.csv).  
-<b>Output:</b> Robot motion (simulation or physical) and CSV file with all data collected at [`src/data_files/output_files`](src/data_files/output_files). 
+<b>Input:</b> CSV file with desired target joint angles for SOLO robot from [Inverse Kinematics Tool](#inverse-kinematics-tool) at [`src/data_files/auto_generated/traj_platform.csv`](../src/data_files/auto_generated/traj_joints.csv).  
+<b>Output:</b> Robot motion (simulation or physical) and CSV file with all data collected at [`src/data_files/output_files`](../src/data_files/output_files). 
 
