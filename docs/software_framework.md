@@ -1,5 +1,9 @@
-### Package Framework Flowchart
-![](../images/solo-6dof-motion-platform_framework.png)
+# Software Framework
+
+## Package Software Framework Flowchart
+<p align="center">
+  <img src="../images/solo-6dof-motion-platform_framework.png" width="500"/>
+</p>
 
 ### Notes   
 - Smooth landing position is hard-coded (joint angles are pre-defined).  
