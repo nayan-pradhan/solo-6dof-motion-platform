@@ -14,7 +14,8 @@ Example of running software configuration for:
 - Sine Sequence
 - Pybullet Inverse Kinematics
 - Solo Control Environment
-- Phase 2 Calibration  
+- Phase 2 Calibration
+
 <p align="center">
   <img src="../images/command_line_interface_example.png" width="500"/>
 </p>
@@ -56,7 +57,8 @@ Example of running software configuration for:
 - Sine Sequence
 - Pybullet Inverse Kinematics
 - Solo Control Environment
-- Phase 2 Calibration  
+- Phase 2 Calibration
+
 <p align="center">
   <img src="../images/in_line_interface_example.png" width="500"/>
 </p>
