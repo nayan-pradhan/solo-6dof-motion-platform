@@ -6,9 +6,9 @@ The primary language used in our software package is Python3. The software frame
 
 Our software framework consists of 4 main modules:
 1. [Platform Trajectory Generation](#platform-trajectory-generation)
-2. Inverse Kinematics Tool 
-3. Control Environment
-4. Post Processing
+2. [Inverse Kinematics Tool](#inverse-kinematics-tool)  
+3. [Control Environment](#control-environment)  
+4. [Post Processing](#post-processing)  
 
 A flowchart showing a high-level overiew of the complete software framework is shown below:
 <p align="center">
@@ -54,3 +54,6 @@ The Control Environment module takes the auto-generated csv file of target joint
 <b>Input:</b> CSV file with desired target joint angles for SOLO robot from [Inverse Kinematics Tool](#inverse-kinematics-tool) at [`src/data_files/auto_generated/traj_platform.csv`](../src/data_files/auto_generated/traj_joints.csv).  
 <b>Output:</b> Robot motion (simulation or physical) and CSV file with all data collected at [`src/data_files/output_files`](../src/data_files/output_files). 
 
+<a name="post-processing"></a>
+
+## 4. Post Processing
