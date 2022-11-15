@@ -24,3 +24,24 @@ The platform is mounted to the robot by four pins fixed to a spherical bearing. 
   <img src="../images/platform_design.png" width="500"/>  
 </p>
 
+### 3. Base Component
+To fix the robot during movement, we designed a base that is screwed on an optic table. The base consists of multiple parts, as shown in the figure below. We replaced the lower center plate of the robot with our design (No. 2), to be able to fix the robot on the base. The plate gets attached by four M3 and eight M2.5 screws to the robot and six M4 screws to the base. The base itself is fixed to the optic table by eight M6 Screws. To further support the robot base, we design clamps (No. 3, 4, 5, 6) that attach close to the hip of the robot.
+<p align="center">
+  <img src="../images/base_design.png" width="500"/>  
+</p>
+
+The table below lists all the parts needed to build the base.
+| No.           | Name      | Qty.  |
+| :-----:       | ---     | :---: |
+| 1  | Base | 1 |
+| 2  | Plate Robot | 1  |
+| 3 | Base Clamp | 2    |
+| 4 | Base Clamp mirrored | 2   |
+| 5 | Robot Clamp | 2   |
+| 6 | Robot Clamp mirrored | 2  |
+| 7 | SHC Screw M6x16 | 8   |
+| 8 | SHC Screw M4x20 | 8   |
+| 9 | SHC Screw M4x25 | 14  |
+| 10 | SHC Screw M3x16 | 4  |
+| 11 | SHC Screw M2.5x25 | 8  |
+| 12 | HeliCoil M4 Thread Insert | 22   |
