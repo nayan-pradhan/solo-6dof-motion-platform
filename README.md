@@ -19,11 +19,11 @@ We present a new open-source Six Degrees of Freedom (DoF) motion platform that i
 3. [Setup and Usage](docs/setup_and_usage.md)
 
 ## <u>About the Creaters</u>
-The SOLO 6 DoF Motion Platform was created at the [Dynamic Locomotion Group](https://dlg.is.mpg.de) at the [Max-Planck Institute for Intelligent Systems](https://is.mpg.de). 
+The SOLO 6 DoF Motion Platform was created at the [Dynamic Locomotion Group](https://dlg.is.mpg.de) at the [Max-Planck Institute for Intelligent Systems](https://is.mpg.de) by: 
 - Nayan Man Singh Pradhan
 - Patrick Frank
 - An Mo
-- Alexander Badri-Sprowitz  
+- Alexander Badri-Sprowitz
 
 ## <u>Link to Paper:</u>
 
