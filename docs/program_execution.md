@@ -1,4 +1,6 @@
-# Instructions to run program
+# Program Execution
+
+## Instructions to run program
 The software package can be executed using the Command Line Interface or the In-line Terminal Interface. 
 
 ---
