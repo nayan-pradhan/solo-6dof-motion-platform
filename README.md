@@ -8,7 +8,7 @@
 </p> -->
 
 <p align="center">
-  <img src="images/solo_render.png" />
+  <img src="images/solo_render.png" width="500"/>
 </p>
 
 ## <u>Introduction</u>
