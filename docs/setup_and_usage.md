@@ -2,7 +2,7 @@
 
 1. [Hardware Setup](#hardware-setup)
 2. [Software Setup](#software-setup)
-
+3. [Realtime OS Setup](#realtime-os-setup)
 
 ---
 
@@ -36,6 +36,60 @@
     make
     sudo PYTHONPATH=./master-board/sdk/master_board_sdk/build pip3 install pybullet pynput
     ```
+
+---
+
+<a name="realtime-os-setup"></a>
+
+### Realtime OS Setup
+1. Install Linux and preempt RT patch.
+    1. Download and install Ubuntu. 
+    2. Install required dependencies.
+        ```
+        sudo apt install -y flex bison libssl-dev libelf-dev libncurses5-dev
+        ```
+    3. Check kernel version. We are using version 5.15.0.
+        ```
+        uname -r
+        ```
+    4. Download preempt RT patch (.patch.xz file) for your kernel version via this [link](https://wiki.linuxfoundation.org/realtime/preempt_rt_versions). We take the latest 5.15 kernel patch.
+    5. Download the kernel matching the preempt RT patch you just downloaded (.tar.xz file) via this [link](https://mirrors.edge.kernel.org/pub/linux/kernel/)
+    6. Extract the downloaded files.
+        ```
+        cd ~/Downloads/
+        xz -d linux-YOURVERSION.tar.xz
+        xz -d patch-YOURVERSION.patch.xz
+        tar xf linux-YOURVERSION.tar
+        ```
+    7. Change directory to kernel directory and apply patch. 
+        ```
+        cd linux-YOURVERSION/
+        patch -p1 < ../patch-YOURVERSION.patch
+        ```
+    8. Configure kernel.
+        ```
+        cp -v /boot/config-$(uname -r) .config
+        make oldconfig
+        ```
+        For Preemption model choose: Fully Preemptible Kernel (Real-Time). For the rest use default settings by pressing enter.
+        ```
+        scripts/config --disable SYSTEM_TRUSTED_KEYS
+        make x86_64_defconfig
+        ```
+    9. Compile and install kernel.
+        ```
+        sudo make deb-pkg
+        sudo make modules_install
+        sudo make install
+        ```
+    10. Update grub. 
+        ```
+        sudo update-initramfs -c -k YOURVERSION
+        sudo update-grub
+        ```
+    11. Reboot system. 
+
+---
 
 ### Robot Positions
 
