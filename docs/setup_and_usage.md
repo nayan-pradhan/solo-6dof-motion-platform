@@ -4,6 +4,7 @@
 2. [Software Setup](#software-setup)
 3. [Realtime OS Setup](#realtime-os-setup)
 4. [Calibration Process](#calibration-process)
+5. [Robot Positions](#robot-positions)
 
 ---
 
@@ -173,7 +174,7 @@ Phase 2 calibration should be executed only after the csv file: 'src/data_files/
     ```
     bash start_program.sh -s s -i p -c s -p 2
     ```
----
+
 It is important to run calibration phase 2 once every time after the power supply is restarted. If the power supply has not been restarted and if calibration phase 2 has already been executed once at the start of this test run (if csv file: 'src/data_files/calibration_files/solo_phase2_calibrated_offsets.csv' is updated), there is no need to run the calibration phase 2 again. After completing phase 2 once, you can run the steps below without having to manually adjust the position of the platform or robot. The program starts by taking the current joint angles of the motors and moves to the home position by interpolating a linear joint angle target to the home position. 
 **Steps if calibration step 2 has already been executed once after power supply has been turned ON:**
 1. Make sure that calibration phase 2 has already been executed once at the beginning of the current test run.
@@ -183,11 +184,36 @@ It is important to run calibration phase 2 once every time after the power suppl
     bash start_program.sh -s s -i p -c s -p x
     ```
 
-### Robot Positions
+---
 
 <a name="robot-positions"></a>
 
+### Robot Positions
+#### Zero position
+Configuration of Robot when calibration tools are attached at Calibration Phase 0.
+<p align="center">
+  <img src="../images/solo_zero_position.png" width="500"/>  
+</p>
 
+#### Calibration position
+Configuration of Robot when calibration tools are not attached and before starting Calibration Phase
+<p align="center">
+  <img src="../images/solo_calibration_position.png" width="500"/>  
+</p> 
+
+#### Home position
+Configuration of Robot when no sequence is given or when Robot is waiting for ADC trigger. 
+<p align="center">
+  <img src="../images/solo_home_position.png" width="500"/>  
+</p> 
+
+#### Landing position
+Configuration of Robot after completing smooth landing.
+<p align="center">
+  <img src="../images/solo_landing_position.png" width="500"/>  
+</p> 
+
+---
 
 ### Notes   
 - Smooth landing position is hard-coded (joint angles are pre-defined).  
