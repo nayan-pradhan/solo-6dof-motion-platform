@@ -6,7 +6,8 @@
 4. [Calibration Process](#calibration-process)
 5. [Robot Behaviour](#robot-behaviour)
 6. [Robot Positions](#robot-positions)
-7. [Notes](#notes)
+7. [Known Issues and Solutions](#known-issues-and-solutions)
+8. [Notes](#notes)
 
 ---
 
@@ -225,21 +226,44 @@ After completing the hardware and software setup, you are ready to use our SOLO 
 A high level overview of the software steps and expected robot behaviour is as following:
 1. Hardware Setup is completed (Refer to [Hardware Setup](#hardware-setup)). 
 2. Software Setup is completed (Refer to [Software Setup](#software-setup)). 
-3. Robot calibration phase 0 and calibration phase 1 are completed (refer to [Calibration Process](#calibration-process)).
-4. The user runs a program with the SOLO control environemnt (refer to [Program Execution](./program_execution.md)).
-5. If calibration phase 2 is not completed, SOLO robot executes calibration phase 2. 
-6. After finding the motor indices, the robot goes to home position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. If the correct motor indices are not found, the home position has an offset and does not look like the image in [Robot Positions](robot-positions).
-7. The robot stays in the home position and waits for the ADC button trigger signal. 
-8. After receiving the ADC button trigger signal, the robot waits for 2 seconds as a safety mechanism. Then the robot starts to move our 6 DoF Motion Platform in the commanded motion trajectory. 
-9. After completing the commanded motion trajectory, the robot places the motion platform in the landing position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. 
-10. The data will be processed (time of processing data depends on the runtime of the motion platform and length of commanded motion trajectory).
-11. The processed data will be visualized through plots and graphs. 
-12. The program ends.
+3. Realtime OS Setup is completed (Refer to [Realtime OS Setup](#realtime-os-setup)).
+4. Robot calibration phase 0 and calibration phase 1 are completed (refer to [Calibration Process](#calibration-process)).
+5. The user runs a program with the SOLO control environemnt (refer to [Program Execution](./program_execution.md)).
+6. If calibration phase 2 is not completed, SOLO robot executes calibration phase 2. 
+7. After finding the motor indices, the robot goes to home position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. If the correct motor indices are not found, the home position has an offset and does not look like the image in [Robot Positions](robot-positions).
+8. The robot stays in the home position and waits for the ADC button trigger signal. 
+9. After receiving the ADC button trigger signal, the robot waits for 2 seconds as a safety mechanism. Then the robot starts to move our 6 DoF Motion Platform in the commanded motion trajectory. 
+10. After completing the commanded motion trajectory, the robot places the motion platform in the landing position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. 
+11. The data will be processed (time of processing data depends on the runtime of the motion platform and length of commanded motion trajectory).
+12. The processed data will be visualized through plots and graphs. 
+13. The program ends.
+
+---
+
+<a name="known-issues-and-solutions"></a>
+
+### Known Issues and Solutions
+
+- #### Beeping sound from motor drivers
+    **_Issue:_** Robot motor drivers beep when starting up bash script. This issue usually occurs when testing with the robot is done for a very long time or if the power supply has been turned ON for a very long time (3-4 hours). The masterboard also gets very warm.  
+    **_Solution:_** Turn the power supply OFF for a few minutes (around 10-15 minutes) and restart the power supply when the masterboard is cool to touch.
+
+- #### Robot timeout/motor drivers red blinking lights  
+    **_Issue:_** Robot times out and the motor drivers start blinking red lights. This issue usually occurs when the motors do not receive a new command for more than 1 milli-second. We experienced this issue when we were trying to append new data into a 2-dimensional array and when we tried printing multiple lines in the main loop.  
+    **_Solution:_** Avoid running tasks that take a lot of time (eg. appending into 2-dimensional array, printing multiple lines in each iteration, etc) in the main loop.
+
+- #### Wrong motor index found
+    **_Issue:_** Sometimes the correct motor indices are not found in the calibration step. If the correct motor indices are not found, the motors will have an offset of . This issue happens if the robot is not setup properly for Calibration Phase 2.  
+    **_Solution:_** If you see that the correct motor is not found (motor has an offset of ), immediately stop the program and redo Calibration Phase 2. Make sure the robot motor joints are in the correct 'Calibration Position' as shown in Robot Positions/Configurations.
+
+- #### Robot does unexpected sudden movement at startup
+    **_Issue:_** Stop the program immediately if the robot does unexpected sudden movements at startup. This is usually a result of not following the calibration steps properly.  
+    **_Solution:_** Re-do the calibration steps carefully. Make sure proper motor indices are saved in the csv files.
 
 ---
 
 <a name="notes"></a>
 
 ### Notes   
-- Smooth landing position is hard-coded (joint angles are pre-defined).  
-- To give access of output history files to user, do 'sudo chown user:user \*' in data_files/\*/history/ directory.  
+- Smooth landing position is hard-coded (joint angles are pre-defined). If smooth landing is not working as expected, print the joint angles at the position you want to specify as landing position and update the smooth landing variable: `self.smooth_landing_pos` in file: [`src/control/solo_ctrl.py`](#../src/control/solo_ctrl.py).
+- To give edit access of output history files to user, do `sudo chown user:user \*` in `data_files/*/history/` directory.
