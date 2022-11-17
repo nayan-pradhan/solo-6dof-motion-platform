@@ -9,7 +9,7 @@ The hardware framework consists of three main components:
 2. the [platform attached to the legs](#platform-attached-to-legs) of the SOLO robot, and
 3. the [base component](#base-component) that makes sure the robot is fixed to a table.
 
-The figure above shows the robot fixed to an optic table with the attached platform.
+The figure above shows the robot fixed to an optic table with the attached platform. The necessary CAD files can be found [here](../resources/CAD_files/).
 
 <a name="solo-robot"></a>
 
