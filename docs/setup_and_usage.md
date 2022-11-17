@@ -230,7 +230,7 @@ A high level overview of the software steps and expected robot behaviour is as f
 5. If calibration phase 2 is not completed, SOLO robot executes calibration phase 2. 
 6. After finding the motor indices, the robot goes to home position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. If the correct motor indices are not found, the home position has an offset and does not look like the image in [Robot Positions](robot-positions).
 7. The robot stays in the home position and waits for the ADC button trigger signal. 
-8. After receiving the ADC button trigger signal, the robot waits for 2 seconds (can be updated in [`src/config.py`](../src/config.py)) as a safety mechanism. Then the robot starts to move our 6 DoF Motion Platform in the commanded motion trajectory. 
+8. After receiving the ADC button trigger signal, the robot waits for 2 seconds as a safety mechanism. Then the robot starts to move our 6 DoF Motion Platform in the commanded motion trajectory. 
 9. After completing the commanded motion trajectory, the robot places the motion platform in the landing position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. 
 10. The data will be processed (time of processing data depends on the runtime of the motion platform and length of commanded motion trajectory).
 11. The processed data will be visualized through plots and graphs. 
