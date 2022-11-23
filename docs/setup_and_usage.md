@@ -173,16 +173,22 @@ Phase 2 calibration should be executed only after the csv file: 'src/data_files/
 2. Make sure the power supply is OFF.
 3. Manually lift the platform high up such that the robot and motors are in the calibration position.
 4. After robot and motors are in the calibration position, turn power supply ON.
-5. Run the script with the phase 2 calibration flag. The flags for the type of sequence and inverse kinematics matter in this step. After completing calibration phase 2, the robot waits in the home position for the ADC trigger. After the ADC is triggered, the robot starts the specified platform motion. 
+5. Run the script with the phase 2 calibration flag. The flags for the type of sequence and inverse kinematics does not matterr in this step too. After completing calibration phase 2, the robot goes into the free solo control mode. 
     ```
     bash start_program.sh -s s -i p -c s -p 2
     ```
+6. After finding the calibration indices in phase 2, the robot interpolates to the proper calibrated zero position and starts the free solo control class. This allows the user to move the platform around without the exerting any external torque. 
+7. When you start to see the joint angles printing in the screen, move the platform to the [landing position](#landing-position). 
+8. After the platform is set to the  [landing position](#landing-position), press the ADC trigger button. This will save the landing position (with the offset) into the csv file: 'src/data_files/calibration_files/solo_landing_pos.csv'.
+9. Press `ctrl+c` to exit from the program.
 
-It is important to run calibration phase 2 once every time after the power supply is restarted. If the power supply has not been restarted and if calibration phase 2 has already been executed once at the start of this test run (if csv file: 'src/data_files/calibration_files/solo_phase2_calibrated_offsets.csv' is updated), there is no need to run the calibration phase 2 again. After completing phase 2 once, you can run the steps below without having to manually adjust the position of the platform or robot. The program starts by taking the current joint angles of the motors and moves to the home position by interpolating a linear joint angle target to the home position. 
+It is important to run calibration phase 2 once every time after the power supply is restarted. If the power supply has not been restarted and if calibration phase 2 has already been executed once at the start of this test run, there is no need to run the calibration phase 2 again. After completing phase 2 once, you can run the steps below without having to manually adjust the position of the platform or robot. 
+
+#### Calibration Phase X
 **Steps if calibration step 2 has already been executed once after power supply has been turned ON:**
 1. Make sure that calibration phase 2 has already been executed once at the beginning of the current test run.
 2. The power supply should be ON. If power supply is OFF, you must run calibration phase 2 as detailed above and you should not continue with the steps below.
-3. If power supply is ON, you can run the script with the no calibration flag.
+3. If power supply is ON, you can run the script with the no calibration flag. If you have already generated your motion trajectory, you can use the pre-existing inverse kinematics flag. If not, use the flags according to the platform motion you want to execute. 
     ```
     bash start_program.sh -s s -i p -c s -p x
     ```
