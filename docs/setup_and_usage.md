@@ -150,7 +150,7 @@ Phase 0 calibration initializes the motors and the masterboard. The goal of phas
 2. Turn power supply ON. 
 3. Run the program with the phase 0 calibration flag. The flags for the type of sequence and inverse kinematics does not matter in this step. 
     ```
-    bash start_program.sh -s s -i p -c s -p 0
+    bash start_program.sh -s 0 -i 0 -c s -p 0
     ```
 4. Remove calibration tools. Keep power supply ON.
 
@@ -162,7 +162,7 @@ After completing phase 1 once, the csv file: 'src/data_files/calibration_files/s
 1. Make sure the calibration tools are removed.
 2. After calibration tools are removed, run the script with the phase 1 calibration flag. The flags for the type of sequence and inverse kinematics does not matter in this step. 
     ```
-    bash start_program.sh -s s -i p -c s -p 1
+    bash start_program.sh -s 0 -i 0 -c s -p 1
     ```
 3. Turn power supply OFF.
 
