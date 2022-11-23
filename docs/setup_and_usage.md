@@ -153,6 +153,9 @@ Phase 0 calibration initializes the motors and the masterboard. The goal of phas
     bash start_program.sh -s 0 -i 0 -c s -p 0
     ```
 4. Remove calibration tools. Keep power supply ON.
+5. Run the program with free control flag. The robot will not receive any current command. Therefore you can move the platform around. 
+6. Move the platform into the [landing position](#robot-positions). Press the ADC trigger button in order to save the landing position. You will receive a success message after the landing position is saved.
+7. Calibration phase 0 is complete. Keep the power supply ON.
 
 #### Calibration Phase 1
 Phase 1 calibration should be executed after phase 0 calibration. Phase 1 calibration finds the indices of the motors from the zero position (set at phase 0). Phase 1 calibration moves all the four hip motors, lower leg motors, and upper leg motors in a synchronized manner until either all the four corresponding motor indices are found or until the set maximum and minimum motor angle variable is reached in both directions respectively. Currently, the maximum motor angle is 25&deg; and minimum motor angle is -25&deg;. If all motor indices are found, the final indices calibration array is saved in the csv file: `src/data_files/calibration_files/solo_phase1_calibrated_offsets.csv`. If all motor indices are not found, there is something wrong in the calibration step. Turning OFF and then turning ON the power supply and re-doing the calibration process (from phase 0) should solve the issue. After saving the motor indices, the motion platform is smoothly placed on the robot body by the `smooth_landing` method. The program ends automatically after completion of calibration phase 1.
