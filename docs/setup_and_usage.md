@@ -272,5 +272,4 @@ A high level overview of the software steps and expected robot behaviour is as f
 <a name="notes"></a>
 
 ### Notes   
-- Smooth landing position is hard-coded (joint angles are pre-defined). If smooth landing is not working as expected, print the joint angles at the position you want to specify as landing position and update the smooth landing variable: `self.smooth_landing_pos` in file: [`src/control/solo_ctrl.py`](#../src/control/solo_ctrl.py).
 - To give edit access of output history files to user, do `sudo chown user:user \*` in `data_files/*/history/` directory.
