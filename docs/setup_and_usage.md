@@ -187,8 +187,9 @@ It is important to run calibration phase 2 once every time after the power suppl
 #### Calibration Phase X
 **Steps if calibration step 2 has already been executed once after power supply has been turned ON:**
 1. Make sure that calibration phase 2 has already been executed once at the beginning of the current test run.
-2. The power supply should be ON. If power supply is OFF, you must run calibration phase 2 as detailed above and you should not continue with the steps below.
-3. If power supply is ON, you can run the script with the no calibration flag. If you have already generated your motion trajectory, you can use the pre-existing inverse kinematics flag. If not, use the flags according to the platform motion you want to execute. 
+2. The solo robot should be in [landing position](#landing-position).
+3. The power supply should be ON. If power supply is OFF, you must run calibration phase 2 as detailed above and you should not continue with the steps below.
+4. If power supply is ON, you can run the script with the no calibration flag. If you have already generated your motion trajectory, you can use the pre-existing inverse kinematics flag. If not, use the flags according to the platform motion you want to execute. 
     ```
     bash start_program.sh -s s -i p -c s -p x
     ```
