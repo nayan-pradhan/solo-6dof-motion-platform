@@ -104,12 +104,13 @@ A high level overview of the software steps and expected robot behaviour is as f
 3. Realtime OS Setup is completed (Refer to [Realtime OS Setup](#realtime-os-setup)).
 4. Robot calibration phase 0 and calibration phase 1 are completed (refer to [Calibration Process](#calibration-process)).
 5. The user runs a program with the SOLO control environemnt (refer to [Program Execution](./program_execution.md)).
-6. If calibration phase 2 is not completed, SOLO robot executes calibration phase 2. 
-7. After finding the motor indices, the robot goes to home position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. If the correct motor indices are not found, the home position has an offset and does not look like the image in [Robot Positions](robot-positions).
-8. The robot stays in the home position and waits for the ADC button trigger signal. 
-9. After receiving the ADC button trigger signal, the robot waits for 2 seconds as a safety mechanism. Then the robot starts to move our 6 DoF Motion Platform in the commanded motion trajectory. 
-10. After completing the commanded motion trajectory, the robot places the motion platform in the landing position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. 
-11. The data will be processed (time of processing data depends on the runtime of the motion platform and length of commanded motion trajectory).
-12. The processed data will be visualized through plots and graphs. 
-13. The program ends.
+6. If calibration phase 2 is not completed, the user runs calibration phase 2. Then the landing position is set (refer to [Calibration Position](#calibration-process). 
+7. The user runs the program with calibration phase x from landing position.
+8. From the landing position, the robot goes to home position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. If the correct motor indices are not found, the home position has an offset and does not look like the image in [Robot Positions](robot-positions).
+9. The robot stays in the home position and waits for the ADC button trigger signal. 
+10. After receiving the ADC button trigger signal, the robot waits for 2 seconds as a safety mechanism. Then the robot starts to move our 6 DoF Motion Platform in the commanded motion trajectory. 
+11. After completing the commanded motion trajectory, the robot places the motion platform in the landing position (refer to [Robot Positions](robot-positions)) through a smooth linear interpolation trajectory. 
+12. The data will be processed (time of processing data depends on the runtime of the motion platform and length of commanded motion trajectory).
+13. The processed data will be visualized through plots and graphs. 
+14. The program ends.
 
