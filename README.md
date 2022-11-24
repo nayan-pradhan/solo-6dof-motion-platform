@@ -21,6 +21,8 @@ The SOLO 6 DoF Motion Platform was created at the [Dynamic Locomotion Group](htt
 - Alexander Badri-Sprowitz
 
 ## <u>Link to Paper</u>
+_Will be updated soon!_
 
 ## <u>Referencing the Project and Paper</u>
 You can reference the project with the following citation:
+_Will be updated soon!_
