@@ -45,6 +45,7 @@ SOLO_CALCULATED_FILE_NAME = 'solo_calculated.csv'
 GLOBAL_CALIBRATION_FILES_DIRECTORY = 'data_files/calibration_files/'
 CALIBRATION_PHASE_1_FILE = 'solo_phase1_calibrated_offsets.csv'
 CALIBRATION_PHASE_2_FILE = 'solo_phase2_calibrated_offsets.csv'
+LANDING_POS_FILE = 'solo_landing_pos.csv'
 
 # TIME FOR INTERPOLATINS IN SOLO CONTROL 
 TIME_INTERPOLATE_HOME = 1000 # ms
