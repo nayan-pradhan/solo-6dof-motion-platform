@@ -11,7 +11,11 @@ from config import *
 import time
 from control.free_solo_ctrl import *
 
-import libmaster_board_sdk_pywrap as mbs
+try:
+    import libmaster_board_sdk_pywrap as mbs
+except ImportError:
+    # print("- Cannot find libmaster_board_sdk_pywrap. PyBullet Simulation will work as normal but SOLO control will not work.")
+    pass 
 
 class SoloControlClass():
 
