@@ -169,7 +169,10 @@ class SoloControlClass():
                                     self.run_calibration_synced()
 
                             elif not self.completed_phase_1_exit:
-                                self.do_smooth_landing()
+                                print("Calibration Phase 1 Completed. In Free SOLO Control.")
+                                self.robot_if.Stop()
+                                FreeSoloClass()
+                                exit(1)
 
                             elif self.phase_2_calibration:
                                 if self.calibrated_offsets == []:
@@ -366,9 +369,12 @@ class SoloControlClass():
             :return: None
             :rtype: None
         """
-        self.smooth_home_pos = self.sequence_motion_trajectory[0] # first elem of generated trajectory is always in home position
-        self.smooth_landing_pos = self.load_offsets(GLOBAL_CALIBRATION_FILES_DIRECTORY+LANDING_POS_FILE) # loading from calibration of landing position
-    
+        self.smooth_home_pos = self.sequence_motion_trajectory[0]
+        try:
+            self.smooth_landing_pos = self.load_offsets(GLOBAL_CALIBRATION_FILES_DIRECTORY+LANDING_POS_FILE)
+        except:
+            self.smooth_landing_pos = [0.0]*12
+
 
     def get_mapped_joints_from_pybullet_to_robot(self, pybullet_trajectory):
         """
