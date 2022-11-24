@@ -51,12 +51,6 @@ class FreeSoloClass():
 
     
     def main_loop(self):
-        """
-            Main execution block. Runs until robot is not timeout. Maintains frequency of 1000 Hz.  
-
-            :return: None.
-            :rtype: None.
-        """
         while(1):
             if ((time.time() - self.last) > self.dt):
                 self.last = time.time()
@@ -96,12 +90,6 @@ class FreeSoloClass():
 
     
     def read_adc_trigger(self):
-        """
-            Reads ADC trigger. If trigger button is pressed, saves offset values in solo_landing_pos.csv.
-
-            :return: If trigger is pressed or not, how many times trigger has been pressed, motor position if trigger is pressed.
-            :rtype: Bool, int, list.
-        """
         if (self.robot_if.GetDriver(3).adc[0]) > self.adc_trigger_threshold:
             self.save_offset(values_at_trigger=self.motor_pos)
             self.adc_triggered_ctr+=1
@@ -231,8 +219,8 @@ class FreeSoloClass():
             print('---')
             print("Loaded values:", row)
         except:
-            print("CSV:", f_name, "not found! Exiting.")
-            exit(1)
+            print("CSV:", f_name, "invalid. Using 0 calibration offset!")
+            row = [0.0]*12
         print('---')
         return row 
 
@@ -244,6 +232,7 @@ class FreeSoloClass():
             :return: None.
             :rtype: None.
         """
+
         if self.robot_if.GetMotor(self.global_i).IsEnabled():
             if self.global_i == 0:
                 print("Motor No.        Motor Name.         Joint Angle")
