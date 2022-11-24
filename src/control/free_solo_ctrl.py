@@ -9,7 +9,10 @@ import numpy as np
 from config import *
 import time
 
-import libmaster_board_sdk_pywrap as mbs
+try:
+    import libmaster_board_sdk_pywrap as mbs
+except ImportError:
+    print("- Cannot find libmaster_board_sdk_pywrap. PyBullet Simulation will work as normal but SOLO control will not work.")
 
 class FreeSoloClass():
 
