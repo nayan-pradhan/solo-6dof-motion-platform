@@ -14,6 +14,8 @@ Help()
    echo
    echo "-h     Print this Help."
    echo 
+   echo "-c  f  Solo Free Control."
+   echo 
    echo "-s     Define sequence type."
    echo "       0   Use pre-existing sequence"
    echo "       a   Use arbitrary sequence"
@@ -81,7 +83,9 @@ do
     esac
 done
 
-if [ "$control_env" = "solo" ] || [ "$control_env" = "s" ] ; then
+if [ "$control_env" = "f" ] ; then 
+    sudo PYTHONPATH=../resources/master-board/sdk/master_board_sdk/build python3 start_program.py -c$control_env
+elif [ "$control_env" = "solo" ] || [ "$control_env" = "s" ] ; then
     sudo PYTHONPATH=../resources/master-board/sdk/master_board_sdk/build python3 start_program.py -s$sequence_type -i$ik_tool -c$control_env -p$calibration_phase
 elif [ "$control_env" = "pybullet" ] || [ "$control_env" = "p" ] ; then 
     if [ "$calibration_phase" == "" ] ; then
