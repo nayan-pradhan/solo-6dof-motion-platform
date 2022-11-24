@@ -2,17 +2,14 @@
     Python script for solo control. 
 """
 
-from concurrent.futures import process
 import math
 import os
-from time import process_time
-from tkinter import *
 import csv
 from scipy.interpolate import interp1d
 import numpy as np
-import matplotlib.pyplot as plt
 from config import *
 import time
+from control.free_solo_ctrl import *
 
 import libmaster_board_sdk_pywrap as mbs
 
@@ -44,11 +41,7 @@ class SoloControlClass():
         self.init_starting_params()
         if self.phase_0_calibration:
             self.init_masterboard_params()
-            print("PHASE 0 Calibration. Motors and masterboard initialized. Exiting... \n \
-                    Run Phase 1 with -c flag. \n \
-                    Run Phase 2 with -v flag. \n \
-                    Run sequences using calibrated parameters with no flag.\n \
-                    End of program.")
+            print("PHASE 0 Calibration. Motors and masterboard initialized. Exiting... \nRun Phase 1 with -c flag. \nRun Phase 2 with -v flag. \nRun sequences using calibrated parameters with no flag.\nEnd of program.")
             exit(1)
 
         self.sequence_motion_trajectory = self.load_trajectory(self.csv_joint_positions_file_name)
@@ -172,7 +165,7 @@ class SoloControlClass():
                                     self.run_calibration_synced()
 
                             elif not self.completed_phase_1_exit:
-                                self.smooth_landing()
+                                self.do_smooth_landing()
 
                             elif self.phase_2_calibration:
                                 if self.calibrated_offsets == []:
@@ -190,6 +183,7 @@ class SoloControlClass():
                                     
                                 else:
                                     self.run_calibration_synced()
+                                    self.do_zero_position_after_calibration = True
 
                             elif self.load_calibrated_zero_angles:
                                 self.calibrated_zero_position = self.load_offsets(f_name=self.name_of_offset_calibrated_zeros_csv)
@@ -201,8 +195,13 @@ class SoloControlClass():
                                     not self.phase_2_calibration and \
                                     not self.in_motion_trajectory_sequence and \
                                     not self.end_sequence:
-                                self.go_to_home_position()
-
+                                # self.robot_if.Stop()
+                                # exit(1)
+                                # self.go_to_home_position()
+                                if self.do_zero_position_after_calibration:
+                                    self.go_to_zero_position()
+                                else:
+                                    self.go_to_home_position()
 
                             elif not self.trigger_is_triggered:
                                 self.maintain_home_position()
@@ -229,7 +228,7 @@ class SoloControlClass():
                                     print("Sequence End Time: ", self.sequence_end_time)
                                     print("Total Sequence Runtime:", self.sequence_end_time - self.sequence_start_time)
                                     print('---')
-                                self.smooth_landing()
+                                self.do_smooth_landing()
 
                     self.controller()
 
@@ -325,8 +324,6 @@ class SoloControlClass():
             :type name_of_csv: str.
             :param header: Specify whether csv file have header or not.
             :type header: Bool.
-            :param num_headers: Number of headers to skip.
-            :type num_headers: int.
             :return: Returns all data in the csv file.
             :rtype: list[list[float]].
         """
@@ -365,11 +362,10 @@ class SoloControlClass():
             :return: None
             :rtype: None
         """
-        # self.smooth_home_pos = self.get_mapped_joints_from_pybullet_to_robot([-0.037203307889674325,0.8290071456009634,-1.6202735010055305,0.03426181807382118,-0.8275963030031294,1.6176527246021368,0.037345308637274914,-0.829112352127045,1.6206753891770533,-0.03441811847655554,0.8276649056787524,-1.6178769925353353])
-        self.smooth_home_pos = self.sequence_motion_trajectory[0]
-        self.smooth_landing_pos = [-1.23277903, -2.27580261,  22.8462677,  -12.07741261, -23.30683899, 12.54417896, -1.92193758, -1.67543256, -23.13659668, 12.57938099, 23.45023537, -13.1005497]
-
+        self.smooth_home_pos = self.sequence_motion_trajectory[0] # first elem of generated trajectory is always in home position
+        self.smooth_landing_pos = self.load_offsets(GLOBAL_CALIBRATION_FILES_DIRECTORY+LANDING_POS_FILE) # loading from calibration of landing position
     
+
     def get_mapped_joints_from_pybullet_to_robot(self, pybullet_trajectory):
         """
             Converts PyBullet joint/motor indices into robot joint/motor indices and returns updated trajectory.
@@ -379,7 +375,6 @@ class SoloControlClass():
             :return: Trajectory with updated indices.
             :rtype: list[list[float]].
         """
-
         if len(pybullet_trajectory) != 12 and len(pybullet_trajectory) != 16:
             print("Number of joint positions != 12 or 16. Exiting!")
             exit(-1) 
@@ -398,8 +393,7 @@ class SoloControlClass():
 
 
         mapped_trajectory = [None] * self.n_slaves * 2
-        # mapped_trajectory[robot_motor_index] = pybullet_trajectory[correpsonding_pybullet_joint_index]
-
+        ''' mapped_trajectory[robot_motor_index] = pybullet_trajectory[correpsonding_pybullet_joint_index] '''
         mapped_trajectory[self.motor_mapping["bl_hip"]] = - pybullet_trajectory[6] # bl_hip = hip_left_back 
         mapped_trajectory[self.motor_mapping["br_hip"]] = pybullet_trajectory[9] # br_hip = hip_right_back
         mapped_trajectory[self.motor_mapping["bl_lower"]] = pybullet_trajectory[8] # bl_lower = lower_leg_left_back
@@ -432,6 +426,8 @@ class SoloControlClass():
         self.sequence_counter = 0 
         self.end_sequence = False 
         self.going_home = False 
+        self.going_zero = False
+        self.interploate_zero_complete = False
         self.completed_phase_1_exit = True 
         self.name_of_calibration_saved_csv = GLOBAL_CALIBRATION_FILES_DIRECTORY+CALIBRATION_PHASE_1_FILE
         self.name_of_offset_calibrated_zeros_csv = GLOBAL_CALIBRATION_FILES_DIRECTORY+CALIBRATION_PHASE_2_FILE
@@ -441,19 +437,21 @@ class SoloControlClass():
         self.save_curr_target = []
         self.save_time = [] 
         self.data = []
-
-        self.smooth_landing_phase_1 = False 
+        self.doing_smooth_landing = False 
+        self.interploate_smooth_landing_complete = False 
         self.use_i = False
         self.finished_smooth_landing = False
         self.diff_threshold = 5.0
         self.motors_fighting = [False] * self.n_slaves * 2
         self.interploate_home_complete = False 
         self.interpolate_home_trajectory = [[None] * self.n_slaves * 2] 
-        self.smooth_landing_trajectory_transition = [[None] * self.n_slaves * 2] 
+        self.interpolate_zero_trajectory = [[None] * self.n_slaves * 2] 
+        self.interpolate_landing_trajectory = [[None] * self.n_slaves * 2] 
         self.motor_pos = [0] * self.n_slaves * 2
         self.program_complete = False 
         self.trigger_is_triggered = False 
         self.imu_data = []
+        self.do_zero_position_after_calibration = False
 
         self.adc_trigger_threshold = 0.50
 
@@ -552,14 +550,6 @@ class SoloControlClass():
             :return: None.
             :rtype: None.
         """
-        # controller parameter
-        # NOTE: Currently controller gain values are updated in the controller(self) method and are NOT following below gain values. 
-        # ku = 3
-        # tu = 1/self.frequency
-        # self.seq_kp = ku*0.8
-        # self.seq_kd = ku * tu
-        # self.seq_kp = ku
-        # self.seq_kd = 0.0
         self.seq_kp = 3.5
         self.seq_kd = 0.0375
 
@@ -569,7 +559,6 @@ class SoloControlClass():
         self.cur = np.zeros(self.n_slaves*2)
         self.controller_i = np.zeros(self.n_slaves*2)
         self.p_err = 0.0
-        # print(self.seq_kp, self.seq_kd)
 
 
     def interpolate_smooth_trajectory(self, prev_sequence=None, next_sequence=None, step_size=1000):
@@ -615,7 +604,6 @@ class SoloControlClass():
         self.motor_pos = np.zeros(self.n_slaves*2)
         motor_vel = np.zeros(self.n_slaves*2)
 
-        
         # Individual controller gains for different tasks
         if self.going_home:
             # self.iq_sat = 1.0
@@ -629,10 +617,10 @@ class SoloControlClass():
             self.ki = self.seq_ki
             self.kd = self.seq_kd
 
-        elif self.phase_1_calibration or self.phase_2_calibration:
+        elif self.phase_1_calibration or self.phase_2_calibration or self.going_zero or self.doing_smooth_landing:
             # self.iq_sat = 1.0
             self.kp = 3
-            self.ki = 0.0
+            self.ki = 0.1
             self.kd = 0.03
 
         else: 
@@ -645,8 +633,10 @@ class SoloControlClass():
         for i in range(self.n_slaves*2):
             self.motor_pos[i] = self.robot_if.GetMotor(i).GetPosition()
             motor_vel[i] = self.robot_if.GetMotor(i).GetVelocity()
-        if self.phase_1_calibration or self.phase_2_calibration:
+        if self.phase_1_calibration or self.phase_2_calibration or self.going_zero:
             self.p_err = (self.calibration_target_position - self.motor_pos) * self.motors_spi_connected_indexes_array # 0 for not connected indexes
+        elif self.doing_smooth_landing:
+            self.p_err = (self.target_position - self.motor_pos) * self.motors_spi_connected_indexes_array # 0 for not connected indexes
         else:      
             self.target_position = np.array(self.target_position) + np.array(self.calibrated_zero_position)      
             self.p_err = (self.target_position - self.motor_pos) * self.motors_spi_connected_indexes_array # 0 for not connected indexes
@@ -678,14 +668,49 @@ class SoloControlClass():
                 # print(self.motor_pos)
             else:
                 self.robot_if.GetMotor(i).SetCurrentReference(self.cur[i])
-
-            # self.robot_if.GetMotor(i).SetCurrentReference(0.)     
-            # self.robot_if.PrintIMU()
             
-        # add anti gravity torque
         '''
-            add here
+            add anti gravity torque code here
         '''
+    
+
+    def go_to_zero_position(self):
+        """
+            Sets target position to zero posiiton by using interpolated trajectory to zero position.
+
+            :return: None.
+            :rtype: None.
+        """
+        if not self.going_zero:
+            print("Going Zero Position!")
+            self.sequence_counter = 0
+            self.interploate_zero_complete = False 
+            self.new_zero_position = self.calibrated_zero_position
+ 
+        if not self.interploate_zero_complete:
+            if self.interpolate_zero_trajectory[0][0] is None:
+                self.interpolate_zero_trajectory = self.interpolate_smooth_trajectory(next_sequence=[self.new_zero_position], step_size=5000)
+                self.sequence_counter = 0 
+                self.going_zero = True 
+                print("Starting interpolated trajectory for 5 seconds!")
+                print("Starting Free Solo Control after 5 seconds. Move platform to landing position and save the press the ADC trigger.")
+                print('---')
+
+            elif self.sequence_counter == len(self.interpolate_zero_trajectory)-1:
+                self.interploate_zero_complete = True 
+                self.sequence_counter = 0
+                self.interpolate_zero_trajectory = [[None] * self.n_slaves * 2]
+                print("Completed interpolated trajectory!")
+            else:
+                self.target_position = self.interpolate_zero_trajectory[self.sequence_counter]
+        else:
+            self.going_zero = True
+         
+            print("Completed zero pos!")
+            print('---')
+            self.robot_if.Stop()
+            FreeSoloClass() # call free solo class for saving landing position
+            exit(1)
 
 
     def go_to_home_position(self):
@@ -695,12 +720,10 @@ class SoloControlClass():
             :return: None.
             :rtype: None.
         """
-
         if not self.going_home:
             print("Going Home!")
             self.sequence_counter = 0
             self.interploate_home_complete = False 
-
  
         if not self.interploate_home_complete:
             if self.interpolate_home_trajectory[0][0] is None:
@@ -731,13 +754,19 @@ class SoloControlClass():
                 self.in_motion_trajectory_sequence = True 
 
 
-    def smooth_landing(self):
+    def do_smooth_landing(self):
         """
             Sets target position to smooth landing position by using interpolated trajectory to smooth landing position.
 
             :return: None.
             :rtype: None.
         """
+        if not self.doing_smooth_landing:
+            if self.global_motor_i == 4:
+                print("Doing Smooth Landing!")
+            self.sequence_counter = 0
+            self.interploate_smooth_landing_complete = False 
+
         if self.finished_smooth_landing:
             if self.global_motor_i == 4:
                 print("Program completed!")
@@ -745,39 +774,17 @@ class SoloControlClass():
             return
 
         else:
-
-            if not self.smooth_landing_phase_1:
-                if self.sequence_counter == 0 and self.smooth_landing_trajectory_transition[0][0] is None:
-                    print("Interpolating smooth landing trajectory!")
-                    # print(self.counter)
-                    # self.smooth_landing_trajectory_transition = self.interpolate_smooth_trajectory(next_sequence=[self.smooth_landing_trajectory[0]], step_size=1000)
-                    self.smooth_landing_trajectory_transition = self.interpolate_smooth_trajectory(next_sequence=[self.smooth_landing_pos], step_size=TIME_INTERPOLATE_LANDING)
-                    # self.target_position = np.array(self.smooth_landing_trajectory_transition[self.sequence_counter]) - np.array(self.calibrated_zero_position)   
-
-                if (self.sequence_counter != len(self.smooth_landing_trajectory_transition)-1) or (self.sequence_counter==0):
-                    # if self.sequence_counter == 0:
-                    #     print(self.sequence_counter ,self.target_position)
-                    self.target_position = np.array(self.smooth_landing_trajectory_transition[self.sequence_counter]) - np.array(self.calibrated_zero_position)   
-                    # if self.sequence_counter == 1:
-                    #     print(self.sequence_counter, self.target_position)
-                    #     print('--')
+            if not self.interploate_smooth_landing_complete:
+                if self.interpolate_landing_trajectory[0][0] is None:
+                    self.interpolate_landing_trajectory = self.interpolate_smooth_trajectory(next_sequence=[self.smooth_landing_pos], step_size=TIME_INTERPOLATE_LANDING)
+                    self.sequence_counter = 0 
+                    self.doing_smooth_landing = True 
+                    print('---')
+                elif self.sequence_counter == len(self.interpolate_landing_trajectory)-1:
+                    self.finished_smooth_landing = True 
+                    print("Completed interpolated trajectory!")
                 else:
-                    self.sequence_counter = 0
-                    # self.finished_smooth_landing = True
-                    self.smooth_landing_trajectory_transition = [[None] * self.n_slaves * 2] 
-                    # if self.completed_phase_1_exit:
-                    #     self.completed_phase_1_exit = False 
-                    self.smooth_landing_phase_1 = True 
-                    print("Finished phase 1 smooth landing!")
-
-            elif self.smooth_landing_phase_1:
-                self.sequence_counter = 0
-                self.finished_smooth_landing = True
-                self.smooth_landing_trajectory_transition = [[None] * self.n_slaves * 2] 
-                if self.completed_phase_1_exit:
-                    self.completed_phase_1_exit = False 
-                print("Finished smooth landing")
-                print("---")
+                    self.target_position = self.interpolate_landing_trajectory[self.sequence_counter]
 
 
     def get_imu_data(self):
@@ -796,8 +803,8 @@ class SoloControlClass():
             self.imu_data.append(self.robot_if.imu_data_attitude(ii))
         for ii in range(3):
             self.imu_data.append(self.robot_if.imu_data_linear_acceleration(ii))
-
-
+        
+        
     def save_pos_in_arr(self):
         """
             Saves joint angles into csv file.
@@ -821,7 +828,7 @@ class SoloControlClass():
         self.start_sequence = False 
         self.in_home_position = False 
         self.in_motion_trajectory_sequence = True 
-    
+
         if self.sequence_counter != len(self.sequence_motion_trajectory):
             self.target_position = np.array(self.sequence_motion_trajectory[self.sequence_counter])
         else:
@@ -890,7 +897,6 @@ class SoloControlClass():
         elif self.phase_2_calibration:
                 
             if not self.calibrated_hips_phase_2 and not self.calibrated_lower_ls_phase_2 and not self.calibrated_upper_ls_phase_2:             
-                # print('Calibrating hips')
                 self.calibrate_together(hips)
 
             if self.calibrated_hips_phase_2 and not self.calibrated_lower_ls_phase_2 and not self.calibrated_upper_ls_phase_2:
@@ -998,20 +1004,16 @@ class SoloControlClass():
                 return 
             else:
                 self.reset_calibration_counter = -1
-            # print(list([self.robot_if.GetMotor(actual_motor_i).GetPosition() / 9 for actual_motor_i in range(self.n_slaves*2)]))
 
             motor_angles = [] # stores current motor angles 
             for motor_angles_index, actual_motor_i in enumerate(motor_arr):
-                # print(actual_motor_i)
                 m_angle = self.robot_if.GetMotor(actual_motor_i).GetPosition()  
                 motor_angles.append(m_angle) 
 
             if self.check_is_motor_arr_complete(motor_arr):
                 print("Motor indices array is complete")
-                # self.reset_calibration(motor_arr)
                 self.reset_calibration_complete = False 
 
-            # print('motor_angles',motor_angles)
             # go 1 direction
             if self.move_in_max_dir:  
                 # print("Move in forward direction")
@@ -1022,16 +1024,10 @@ class SoloControlClass():
                             self.calibration_joint_offset_array[actual_motor_i] += self.calibration_joint_offset_step_value
                         elif motor_angles_index % 2 != 0:
                             self.calibration_joint_offset_array[actual_motor_i] -= self.calibration_joint_offset_step_value
-                    # print(self.counter, self.global_motor_i, self.calibration_target_position[0])
                     self.calibration_target_position = np.asarray(self.calibration_target_position) + np.asarray(self.calibration_joint_offset_array)
                 else:
-                # if all(motor_angles[mi] > self.max_motor_angle for mi in range(len(motor_angles)) if mi%2 == 0):
-                    # print('\n')
                     print('All motor anges > max')
-                    # print('\n')
                     self.move_in_max_dir = False 
-                    # if self.phase_1_calibration:
-                    #     self.calibration_target_position = [0]*self.n_slaves*2 
                     self.calibration_joint_offset_array = [0]*self.n_slaves*2 
 
             # go other direction 
@@ -1047,11 +1043,7 @@ class SoloControlClass():
 
                     self.calibration_target_position = np.asarray(self.calibration_target_position) + np.asarray(self.calibration_joint_offset_array)
                 else:
-                # if all(motor_angles[mi] < self.min_motor_angle for mi in range(len(motor_angles)) if mi%2 == 0):
-                    # print('\n')
                     print('All motor anges < min')
-                    # print('\n')
-                    # self.reset_calibration(motor_arr)
                     self.reset_calibration_complete = False 
 
 
@@ -1094,12 +1086,12 @@ class SoloControlClass():
                 if motor_arr[0] == 0: self.calibrated_hips_phase_1 = True 
                 elif motor_arr[0] == 2: self.calibrated_lower_ls_phase_1 = True 
                 elif motor_arr[0] == 3: self.calibrated_upper_ls_phase_1 = True 
-                self.print_calibration_status(self.calibrated_hips_phase_1, self.calibrated_lower_ls_phase_1, self.calibrated_upper_ls_phase_1)
+                self.print_calibration_status(self.calibrated_hips_phase_1, self.calibrated_upper_ls_phase_1, self.calibrated_lower_ls_phase_1)
             elif self.phase_2_calibration:
                 if motor_arr[0] == 0: self.calibrated_hips_phase_2 = True 
                 elif motor_arr[0] == 2: self.calibrated_lower_ls_phase_2 = True 
                 elif motor_arr[0] == 3: self.calibrated_upper_ls_phase_2 = True 
-                self.print_calibration_status(self.calibrated_hips_phase_2, self.calibrated_lower_ls_phase_2, self.calibrated_upper_ls_phase_2)
+                self.print_calibration_status(self.calibrated_hips_phase_2, self.calibrated_upper_ls_phase_2, self.calibrated_lower_ls_phase_2)
             
             self.move_in_max_dir = True
             self.calibration_counter_i += 1
@@ -1261,4 +1253,3 @@ class SoloControlClass():
             #sys.stdout.flush()  # for Python 2, use print( .... , flush=True) for Python 3
             print(flush=True)
             print(self.current_time)
-
