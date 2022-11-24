@@ -4,6 +4,7 @@
 
 from pybullet_program import *
 from solo_program import *
+from free_solo_program import *
 
 class StartProgramClass():
 
@@ -278,6 +279,11 @@ if __name__ == '__main__':
                         action='store_true',
                         help='Use solo control environment')
 
+    parser.add_argument('-cf',
+                        '--use-free-control-env',
+                        action='store_true',
+                        help='Use free solo control environment')
+
     parser.add_argument('-px',
                         '--already-calibrated',
                         action='store_true',
@@ -298,31 +304,35 @@ if __name__ == '__main__':
                         action='store_true',
                         help='Use calibration phase 2')
 
-    sequence_types_options = ["Use Pre-existing Sequence File", "Arbitrary Sequence", "Sine Sequence", "Circular Trajectory", "Step Func"]
-    ik_types_array = ["Use Pre-existing IK Output File", "PyBullet Inverse Kinematics"]
-    control_types_array = ["PyBullet Simulation Control", "Solo Robot Control"]
-    calibration_phases_array = ["Already Calibrated","Phase 0 Calibration", "Phase 1 Calibration", "Phase 2 Calibration"]
+    if parser.parse_args().use_free_control_env:
+        FreeSoloProgram()
 
-    sequence_type_mask = [parser.parse_args().use_pre_existing_sequence, parser.parse_args().use_arbitrary_sequence, parser.parse_args().use_sine_sequence, parser.parse_args().use_circular_trajectory, parser.parse_args().use_step_func]
-    ik_type_mask = [parser.parse_args().use_pre_existing_ik, parser.parse_args().use_pybullet_ik]
-    control_types_mask = [parser.parse_args().use_pybullet_control_env ,parser.parse_args().use_solo_control_env]
-    calibration_phase_mask = [parser.parse_args().already_calibrated, parser.parse_args().use_phase0_calibration, parser.parse_args().use_phase1_calibration, parser.parse_args().use_phase2_calibration]
+    else:
+        sequence_types_options = ["Use Pre-existing Sequence File", "Arbitrary Sequence", "Sine Sequence", "Circular Trajectory", "Step Func"]
+        ik_types_array = ["Use Pre-existing IK Output File", "PyBullet Inverse Kinematics"]
+        control_types_array = ["PyBullet Simulation Control", "Solo Robot Control"]
+        calibration_phases_array = ["Already Calibrated","Phase 0 Calibration", "Phase 1 Calibration", "Phase 2 Calibration"]
 
-    if not any(sequence_type_mask) or not any(ik_type_mask) or not any(ik_type_mask):
-        StartProgramClass()
+        sequence_type_mask = [parser.parse_args().use_pre_existing_sequence, parser.parse_args().use_arbitrary_sequence, parser.parse_args().use_sine_sequence, parser.parse_args().use_circular_trajectory, parser.parse_args().use_step_func]
+        ik_type_mask = [parser.parse_args().use_pre_existing_ik, parser.parse_args().use_pybullet_ik]
+        control_types_mask = [parser.parse_args().use_pybullet_control_env ,parser.parse_args().use_solo_control_env]
+        calibration_phase_mask = [parser.parse_args().already_calibrated, parser.parse_args().use_phase0_calibration, parser.parse_args().use_phase1_calibration, parser.parse_args().use_phase2_calibration]
 
-    elif control_types_mask[0]:
-        StartProgramClass(
-            sequence_type = sequence_types_options[[i for i, x in enumerate(sequence_type_mask) if x == True][0]],
-            inverse_kinematics_tool = ik_types_array[[i for i, x in enumerate(ik_type_mask) if x == True][0]],
-            control_platform = control_types_array[[i for i, x in enumerate(control_types_mask) if x == True][0]],
-            calibration_phase = None
-        )
+        if not any(sequence_type_mask) or not any(ik_type_mask) or not any(ik_type_mask):
+            StartProgramClass()
 
-    elif control_types_mask[1]:
-        StartProgramClass(
-            sequence_type = sequence_types_options[[i for i, x in enumerate(sequence_type_mask) if x == True][0]],
-            inverse_kinematics_tool = ik_types_array[[i for i, x in enumerate(ik_type_mask) if x == True][0]],
-            control_platform = control_types_array[[i for i, x in enumerate(control_types_mask) if x == True][0]],
-            calibration_phase = calibration_phases_array[[i for i, x in enumerate(calibration_phase_mask) if x == True][0]]
-        )
+        elif control_types_mask[0]:
+            StartProgramClass(
+                sequence_type = sequence_types_options[[i for i, x in enumerate(sequence_type_mask) if x == True][0]],
+                inverse_kinematics_tool = ik_types_array[[i for i, x in enumerate(ik_type_mask) if x == True][0]],
+                control_platform = control_types_array[[i for i, x in enumerate(control_types_mask) if x == True][0]],
+                calibration_phase = None
+            )
+
+        elif control_types_mask[1]:
+            StartProgramClass(
+                sequence_type = sequence_types_options[[i for i, x in enumerate(sequence_type_mask) if x == True][0]],
+                inverse_kinematics_tool = ik_types_array[[i for i, x in enumerate(ik_type_mask) if x == True][0]],
+                control_platform = control_types_array[[i for i, x in enumerate(control_types_mask) if x == True][0]],
+                calibration_phase = calibration_phases_array[[i for i, x in enumerate(calibration_phase_mask) if x == True][0]]
+            )
