@@ -235,12 +235,13 @@ class FreeSoloClass():
 
         if self.robot_if.GetMotor(self.global_i).IsEnabled():
             if self.global_i == 0:
-                print("Motor No.        Motor Name.         Joint Angle")
-                for i in range(self.n_slaves*2):
-                    self.motor_pos[i] = self.robot_if.GetMotor(i).GetPosition() + self.calibration_offsets[i] # adding calibration ph2 offsets here
-                    self.motor_vel[i] = self.robot_if.GetMotor(i).GetVelocity()
-                    print("  "+str(i)+"              "+str(self.motor_mapping[i])+"             "+str(self.motor_pos[i]))
-                print("---")
+                if self.global_ctr % 1000 == 0: # for every second -> print
+                    print("Motor No.        Motor Name.         Joint Angle")
+                    for i in range(self.n_slaves*2):
+                        self.motor_pos[i] = self.robot_if.GetMotor(i).GetPosition() + self.calibration_offsets[i] # adding calibration ph2 offsets here
+                        self.motor_vel[i] = self.robot_if.GetMotor(i).GetVelocity()
+                        print("  "+str(i)+"              "+str(self.motor_mapping[i])+"             "+str(self.motor_pos[i]))
+                    print("---")
                 self.global_ctr+=1
 
             for i in self.motors_spi_connected_indexes:
