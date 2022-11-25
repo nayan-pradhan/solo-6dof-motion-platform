@@ -11,8 +11,8 @@ class PybulletControlClass():
 
     def __init__(self, 
         render_gui = True, 
-        kp = 10,
-        kd = 0, 
+        kp = 20,
+        kd = 0.2, 
         torque_saturation = 2
     ):
         
