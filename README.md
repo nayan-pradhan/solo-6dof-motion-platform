@@ -7,6 +7,8 @@ We present an open-source 6 DoF motion platform capable of producing controlled 
 
 Our design is based on the [open-dynamic-robot-initiative](https://github.com/open-dynamic-robot-initiative).
 
+The platform design, pybullet simulation and robot control framework are fully open source.
+
 1. [Hardware Framework](docs/hardware_framework.md)
 2. [Software Framework](docs/software_framework.md)
 3. [Setup and Notes](docs/setup_and_notes.md)
@@ -19,7 +21,6 @@ The SOLO 6 DoF Motion Platform was created at the [Dynamic Locomotion Group](htt
 - Nayan Man Singh Pradhan
 - Patrick Frank
 - An Mo
-- Alexander Badri-Spröwitz
 
 ## <u>Link to Paper</u>
 _Will be updated soon!_
