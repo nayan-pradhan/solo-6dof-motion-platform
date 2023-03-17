@@ -155,7 +155,7 @@ class GenerateArbitraryTrajectory_CSV_Class():
                         else:
                             temp.append(math.radians(float(elem))) # conver deg to rad
                     else:
-                        temp.append(int(elem)) # time in seconds
+                        temp.append(float(elem)) # time in seconds
                     '''
                     try:
                         if elem_i < 3 or (elem_i > 5 and elem_i < 9):
