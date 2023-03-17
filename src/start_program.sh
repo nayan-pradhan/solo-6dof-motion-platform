@@ -88,11 +88,7 @@ if [ "$control_env" = "f" ] ; then
 elif [ "$control_env" = "solo" ] || [ "$control_env" = "s" ] ; then
     sudo PYTHONPATH=../resources/master-board/sdk/master_board_sdk/build python3 start_program.py -s$sequence_type -i$ik_tool -c$control_env -p$calibration_phase
 elif [ "$control_env" = "pybullet" ] || [ "$control_env" = "p" ] ; then 
-    if [ "$calibration_phase" == "" ] ; then
-        sudo PYTHONPATH=../resources/master-board/sdk/master_board_sdk/build python3 start_program.py -s$sequence_type -i$ik_tool -c$control_env
-    else
-        CLI
-    fi
+    sudo PYTHONPATH=../resources/master-board/sdk/master_board_sdk/build python3 start_program.py -s$sequence_type -i$ik_tool -c$control_env
 else
     CLI
 fi
