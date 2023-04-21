@@ -23,8 +23,6 @@ The SOLO 6 DoF Motion Platform was created at the [Dynamic Locomotion Group](htt
 - An Mo
 
 ## <u>Link to Paper</u>
-_Will be updated soon!_
+http://dx.doi.org/10.48550/arXiv.2303.17974
 
-## <u>Referencing the Project and Paper</u>
-You can reference the project with the following citation:
-_Will be updated soon!_
+Pradhan, N. M. S., Frank, P., Mo, A., & Badri-Spröwitz, A. (2023). Upside down: affordable high-performance motion platform. arXiv preprint arXiv:2303.17974.
