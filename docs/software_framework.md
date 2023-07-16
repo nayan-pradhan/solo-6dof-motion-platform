@@ -10,9 +10,9 @@ Our software framework consists of 4 main modules:
 3. [Control Environment](#control-environment)  
 4. [Post Processing](#post-processing)  
 
-A flowchart showing a high-level overiew of the complete software framework is shown below:
+A UML activity diagram showing a high-level overiew of the complete software framework is shown below:
 <p align="center">
-  <img src="../images/solo-6dof-motion-platform_framework.png" width="500"/>
+  <img src="../images/solo_uml_activity_diagram.png" width="500"/>
 </p>
 
 <a name="platform-trajectory-generation"></a>
